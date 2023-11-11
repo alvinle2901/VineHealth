@@ -51,7 +51,7 @@ const CurrentStatus = () => {
   ];
   
   const feelings = ['Wheezy breathing']; // This can be dynamic based on the state
-  const userStreak = ['2023-11-11', '2023-11-12'];
+  const userStreak = ['2023-11-12', '2023-11-13'];
 
   return (
     <View style={styles.card}>
