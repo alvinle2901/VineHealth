@@ -8,8 +8,8 @@ type Props = {
 }
 
 const SymptomScreen = ({navigation}: Props) => {
-  const [selectedSymptom, setSelectedSymptom] = useState(null);
-  const [selectedFrequency, setSelectedFrequency] = useState(null);
+  const [selectedSymptom, setSelectedSymptom] = useState('');
+  const [selectedFrequency, setSelectedFrequency] = useState('');
 
   const dataSymptom = [
     { label: 'Headache', value: 'headache' },
@@ -26,8 +26,8 @@ const SymptomScreen = ({navigation}: Props) => {
 
   const handleNavigate = () => {
     if (selectedSymptom === 'headache') {
-      navigation.navigate('HeadacheRemedy');
-      // Add navigation for other symptoms as needed
+      navigation.navigate('Remedy');
+      // Add navigation for other symptoms as need ed
     }
   };
 
@@ -56,7 +56,9 @@ const SymptomScreen = ({navigation}: Props) => {
         onChange={item => setSelectedFrequency(item.value)}
       />
 
-      <TouchableOpacity style={styles.submitButton} onPress={handleNavigate}>
+      <TouchableOpacity 
+        style={styles.submitButton} 
+        onPress={handleNavigate}>
         <Text style={styles.submitText}>SUBMIT</Text>
       </TouchableOpacity>
     </View>
