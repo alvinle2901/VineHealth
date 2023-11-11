@@ -9,4 +9,5 @@ export const colors = {
   darkBg: '#333242',
   lightBg: '#ECD3C2',
   heading: '#3F414E',
+  facebookBg: '#7583CA'
 }

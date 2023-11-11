@@ -15,17 +15,13 @@ const HomeScreen = (props: Props) => {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Logo */}
-      <Image
-        style={styles.logo}
-        source={require('../../assets/images/logo.png')}
-      />
       {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.heading}>Good Morning, Khoa</Text>
+      <View>
+        <Text style={styles.heading}>Hello, Khoa</Text>
         <Text style={styles.subHeading}>How do you feel today?</Text>
       </View>
       {/* Content */}
-      <View style={styles.sectionWrapper1}>
+      <View style={styles.section1}>
         <View style={styles.item1}>
           <Image
             style={styles.basicImg}
@@ -35,18 +31,8 @@ const HomeScreen = (props: Props) => {
             <Text style={[styles.cardTitle, { color: colors.whiteShade }]}>
               Basic
             </Text>
-            {/* <Text style={[styles.cardSubTitle, { color: colors.whiteShade }]}>
-              COURSE
-            </Text> */}
           </View>
-          <View style={styles.cardFooterWrapper}>
-            <View>
-              <Text
-                style={[styles.footerTitle, { color: colors.whiteShadeBg }]}
-              >
-                3-10 MIN
-              </Text>
-            </View>
+          <View style={styles.footer}>
             <View>
               <TouchableOpacity
                 style={[
@@ -65,16 +51,8 @@ const HomeScreen = (props: Props) => {
             <Text style={[styles.cardTitle, { color: colors.heading }]}>
               Relaxation
             </Text>
-            {/* <Text style={[styles.cardSubTitle, { color: colors.heading }]}>
-              MUSIC
-            </Text> */}
           </View>
-          <View style={styles.cardFooterWrapper}>
-            <View>
-              <Text style={[styles.footerTitle, { color: colors.heading }]}>
-                3-10 MIN
-              </Text>
-            </View>
+          <View style={styles.footer}>
             <View>
               <TouchableOpacity
                 style={[styles.cardBtn, { backgroundColor: colors.heading }]}
@@ -89,7 +67,7 @@ const HomeScreen = (props: Props) => {
       </View>
       {/* Recommended for you */}
       <View style={styles.recommendContainer}>
-        <Text style={styles.recommendTitle}>Recommended for you</Text>
+        <Text style={styles.h1}>Recommended for you</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={[styles.recommendCard]}>
             <View
@@ -98,8 +76,8 @@ const HomeScreen = (props: Props) => {
               <Image source={require('../../assets/images/recommend1.png')} />
             </View>
             <View>
-              <Text style={styles.recommendContentTitle}>Focus</Text>
-              <Text style={styles.recommendContentSubTitle}>
+              <Text style={styles.recommendTitle}>Focus</Text>
+              <Text style={styles.recommendSubTitle}>
                 MEDITATION - 3-10 MIN
               </Text>
             </View>
@@ -111,8 +89,8 @@ const HomeScreen = (props: Props) => {
               <Image source={require('../../assets/images/recommend2.png')} />
             </View>
             <View>
-              <Text style={styles.recommendContentTitle}>Happiness</Text>
-              <Text style={styles.recommendContentSubTitle}>
+              <Text style={styles.recommendTitle}>Happiness</Text>
+              <Text style={styles.recommendSubTitle}>
                 MEDITATION - 3-10 MIN
               </Text>
             </View>
@@ -124,8 +102,8 @@ const HomeScreen = (props: Props) => {
               <Image source={require('../../assets/images/recommend1.png')} />
             </View>
             <View>
-              <Text style={styles.recommendContentTitle}>Focus</Text>
-              <Text style={styles.recommendContentSubTitle}>
+              <Text style={styles.recommendTitle}>Focus</Text>
+              <Text style={styles.recommendSubTitle}>
                 MEDITATION - 3-10 MIN
               </Text>
             </View>
@@ -145,11 +123,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: colors.white
   },
-  logo: {
-    alignSelf: 'center',
-    marginTop: 30
-  },
-  header: {},
   heading: {
     fontFamily: 'HelveticaNeue',
     fontSize: 28,
@@ -162,7 +135,7 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     marginTop: 10,
   },
-  sectionWrapper1: {
+  section1: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 30,
@@ -200,16 +173,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'HelveticaNeue'
   },
-  cardFooterWrapper: {
+  footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 15,
     marginTop: '0%',
     alignItems: 'center'
-  },
-  footerTitle: {
-    fontSize: 11,
-    fontFamily: 'HelveticaNeue'
   },
   cardBtn: {
     borderRadius: 50
@@ -226,7 +195,7 @@ const styles = StyleSheet.create({
   recommendContainer: {
     paddingBottom: 40
   },
-  recommendTitle: {
+  h1: {
     fontSize: 24,
     fontFamily: 'HelveticaNeue',
     color: colors.heading,
@@ -237,7 +206,7 @@ const styles = StyleSheet.create({
     width: 160,
     marginRight: 20
   },
-  recommendContentTitle: {
+  recommendTitle: {
     fontSize: 18,
     fontFamily: 'HelveticaNeue',
     fontWeight: 'bold',
@@ -245,7 +214,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 5
   },
-  recommendContentSubTitle: {
+  recommendSubTitle: {
     fontSize: 11,
     fontFamily: 'HelveticaNeue',
     color: colors.gray
