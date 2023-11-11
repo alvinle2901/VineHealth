@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import LoginScreen from '../src/screens/LoginScreen'
 import SignUpScreen from '../src/screens/SignupScreen'
-import HomeScreen from '../src/screens/HomeScreen'
+import Main from '../navigations/Main'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StackRouter } from '@react-navigation/native'
 
@@ -15,7 +15,7 @@ const Auth = () => {
         headerShown: false
       }}
     >
-      <Stack.Screen name="Home" component={HomeScreen}/>
+      <Stack.Screen name="Main" component={Main}/>
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignUpScreen} />
     </Stack.Navigator>
