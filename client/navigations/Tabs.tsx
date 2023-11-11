@@ -5,9 +5,9 @@ import { colors } from '../src/constants/colors'
 import { sizes } from '../src/constants/theme'
 
 import HomeScreen from '../src/screens/HomeScreen'
-import NewfeedScreen from '../src/screens/NewfeedScreen'
-import PracticeScreen from '../src/screens/PracticeScreen'
+import NewfeedScreen from '../src/screens/DiaryScreen'
 import ProfileScreen from '../src/screens/ProfileScreen'
+import RemedyScreen from '../src/screens/RemedyScreen'
 
 type Props = {}
 
@@ -18,8 +18,8 @@ const tabs = [
     icon: require('../assets/icons/home.png')
   },
   {
-    name: 'Practice',
-    screen: PracticeScreen,
+    name: 'Remedy',
+    screen: RemedyScreen,
     icon: require('../assets/icons/home.png')
   },
   {

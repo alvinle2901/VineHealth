@@ -6,15 +6,17 @@ import {
   ScrollView,
   StyleSheet
 } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
+
 import { colors } from '../constants/colors'
-import { useNavigation } from '@react-navigation/native'
+import { TextInput } from 'react-native-gesture-handler'
 
 type Props = {
   navigation: any
 }
 
-const HomeScreen = ({navigation}: Props) => { 
+const HomeScreen = ({ navigation }: Props) => {
+  const [feeling, setFeeling] = useState('')
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -24,96 +26,92 @@ const HomeScreen = ({navigation}: Props) => {
         <Text style={styles.heading}>Hello, Khoa</Text>
         <Text style={styles.subHeading}>How do you feel today?</Text>
       </View>
-      {/* Content */}
-      <View style={styles.section1}>
-        <View style={styles.item1}>
-          <Image
-            style={styles.basicImg}
-            source={require('../../assets/images/basicImg.png')}
-          />
-          <View style={styles.cardContent}>
-            <Text style={[styles.cardTitle, { color: colors.whiteShade }]}>
-              Basic
-            </Text>
-          </View>
-          <View style={styles.footer}>
-            <View>
-              <TouchableOpacity
-              onPress={()=> navigation.navigate("Symptoms")}
-                style={[
-                  styles.cardBtn,
-                  { backgroundColor: colors.whiteShadeBg }
-                ]}
-              >
-                <Text style={styles.btnLabel}>START</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+      {/* Stats */}
+      <TouchableOpacity onPress={() => navigation.navigate('Symptoms')}>
+        <View
+          style={[
+            styles.attempts,
+            { backgroundColor: colors.primary, height: 200 }
+          ]}
+        >
+          <Text>Symptoms</Text>
+          <Text>Sexuality</Text>
+          <Text>Age</Text>
+          <Text>Frequencies</Text>
+          <Text>Streak</Text>
         </View>
-        <View style={styles.item2}>
-          <Image source={require('../../assets/images/relaxationimg.png')} />
-          <View style={styles.cardContent}>
-            <Text style={[styles.cardTitle, { color: colors.heading }]}>
-              Relaxation
-            </Text>
+      </TouchableOpacity>
+
+      {/* Attempts */}
+      <View style={styles.attempts}>
+        {/* Card Title */}
+        <View style={[styles.cardContent, { top: '0%' }]}>
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: colors.heading,
+                fontSize: 20,
+                fontWeight: 'normal'
+              }
+            ]}
+          >
+            Attempting solution: Remedy 1
+          </Text>
+        </View>
+        {/* Text Input */}
+        <TextInput
+          value={feeling}
+          style={styles.attemptInput}
+          placeholder={'How do you feel about it?'}
+          onChangeText={(e) => setFeeling(e)}
+        />
+        {/* Buttons */}
+        <View
+          style={{
+            bottom: '10%',
+            position: 'absolute',
+            flexDirection: 'row'
+          }}
+        >
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <TouchableOpacity
+              style={[
+                styles.cardBtn,
+                {
+                  backgroundColor: colors.whiteShadeBg,
+                  padding: 5,
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }
+              ]}
+            >
+              <Text style={[styles.btnLabel, { fontSize: 18 }]}>POST</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.footer}>
-            <View>
-              <TouchableOpacity
-                style={[styles.cardBtn, { backgroundColor: colors.heading }]}
-              >
-                <Text style={[styles.btnLabel, { color: colors.whiteShadeBg }]}>
-                  START
-                </Text>
-              </TouchableOpacity>
-            </View>
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <TouchableOpacity
+              style={[
+                styles.cardBtn,
+                {
+                  backgroundColor: colors.whiteShadeBg,
+                  padding: 5,
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }
+              ]}
+            >
+              <Text style={[styles.btnLabel, { fontSize: 18 }]}>FINISH</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
-      {/* Recommended for you */}
-      <View style={styles.recommendContainer}>
-        <Text style={styles.h1}>Recommended for you</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={[styles.recommendCard]}>
-            <View
-              style={[styles.recommendImage, { backgroundColor: '#afdbc5' }]}
-            >
-              <Image source={require('../../assets/images/recommend1.png')} />
-            </View>
-            <View>
-              <Text style={styles.recommendTitle}>Focus</Text>
-              <Text style={styles.recommendSubTitle}>
-                MEDITATION - 3-10 MIN
-              </Text>
-            </View>
-          </View>
-          <View style={[styles.recommendCard]}>
-            <View
-              style={[styles.recommendImage, { backgroundColor: '#fcdea5' }]}
-            >
-              <Image source={require('../../assets/images/recommend2.png')} />
-            </View>
-            <View>
-              <Text style={styles.recommendTitle}>Happiness</Text>
-              <Text style={styles.recommendSubTitle}>
-                MEDITATION - 3-10 MIN
-              </Text>
-            </View>
-          </View>
-          <View style={[styles.recommendCard]}>
-            <View
-              style={[styles.recommendImage, { backgroundColor: '#afdbc5' }]}
-            >
-              <Image source={require('../../assets/images/recommend1.png')} />
-            </View>
-            <View>
-              <Text style={styles.recommendTitle}>Focus</Text>
-              <Text style={styles.recommendSubTitle}>
-                MEDITATION - 3-10 MIN
-              </Text>
-            </View>
-          </View>
-        </ScrollView>
+
+      {/* Feedback */}
+      <View style={[styles.feedback, { marginBottom: 50 }]}>
+        {/* Profile img */}
+        <Text>Username</Text>
+        <Text>Comment</Text>
       </View>
     </ScrollView>
   )
@@ -138,7 +136,7 @@ const styles = StyleSheet.create({
     fontFamily: 'HelveticaNeue',
     fontSize: 20,
     fontWeight: '300',
-    marginTop: 10,
+    marginTop: 10
   },
   section1: {
     flexDirection: 'row',
@@ -197,35 +195,29 @@ const styles = StyleSheet.create({
     marginRight: 15,
     color: colors.heading
   },
-  recommendContainer: {
-    paddingBottom: 40
-  },
-  h1: {
-    fontSize: 24,
-    fontFamily: 'HelveticaNeue',
-    color: colors.heading,
-    fontWeight: 'bold',
-    marginBottom: 20
-  },
-  recommendCard: {
-    width: 160,
-    marginRight: 20
-  },
-  recommendTitle: {
-    fontSize: 18,
-    fontFamily: 'HelveticaNeue',
-    fontWeight: 'bold',
-    color: colors.heading,
-    paddingTop: 10,
-    paddingBottom: 5
-  },
-  recommendSubTitle: {
-    fontSize: 11,
-    fontFamily: 'HelveticaNeue',
-    color: colors.gray
-  },
-  recommendImage: {
+  attempts: {
+    backgroundColor: '#afdbc5',
+    marginBottom: 10,
+    marginTop: 20,
     borderRadius: 20,
-    overflow: 'hidden'
+    width: 'auto',
+    height: 250
+  },
+  attemptInput: {
+    top: '30%',
+    position: 'absolute',
+    height: 70,
+    backgroundColor: colors.whiteShade,
+    borderRadius: 20,
+    paddingHorizontal: 50,
+    alignSelf: 'center'
+  },
+  feedback: {
+    backgroundColor: '#afdbc5',
+    marginBottom: 10,
+    marginTop: 20,
+    borderRadius: 20,
+    width: 'auto',
+    height: 120
   }
 })
