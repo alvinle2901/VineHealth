@@ -7,7 +7,7 @@ import {
   StyleSheet
 } from 'react-native'
 import React, { useState } from 'react'
-
+import moment from 'moment'
 import { colors } from '../constants/colors'
 import { TextInput } from 'react-native-gesture-handler'
 import { getAuth } from 'firebase/auth'
@@ -16,7 +16,65 @@ import { app } from '../../firebase.config'
 type Props = {
   navigation: any
 }
+const CalendarStreak = ({ streak }) => {
+  const daysInWeek = Array.from({ length: 7 }, (_, i) =>
+    moment().startOf('week').add(i, 'days')
+  );
 
+  return (
+    <View style={styles.streakContainer}>
+      {daysInWeek.map((day, index) => (
+        <View key={index} style={styles.dayContainer}>
+          <Text style={styles.dayLabel}>
+            {day.format('dd').charAt(0)} {/* First letter of the day */}
+          </Text>
+          <View
+            style={[
+              styles.dayIndicator,
+              streak.includes(day.format('YYYY-MM-DD')) ? styles.activeDay : {},
+            ]}
+          >
+            <Text style={styles.dayNumber}>{day.format('D')}</Text>
+          </View>
+        </View>
+      ))}
+    </View>
+  );
+};
+
+const CurrentStatus = () => {
+  // Define your tags and states here
+  const tags = [
+    { text: 'Sinusitis' },
+    { text: 'Women' },
+    { text: '38yr' },
+  ];
+  
+  const feelings = ['Wheezy breathing']; // This can be dynamic based on the state
+  const userStreak = ['2023-11-06', '2023-11-07', '2023-11-08'];
+
+  return (
+    <View style={styles.card}>
+      <View style={styles.tagRow}>
+        {tags.map((tag, index) => (
+          <View key={index} style={[styles.tag]}>
+            <Text style={styles.tagText}>{tag.text}</Text>
+          </View>
+        ))}
+      </View>
+      <View style={styles.tagRow}>
+        <Text>Today, I'm feeling:</Text>
+        {feelings.map((feeling, index) => (
+          <View key={index} style={styles.tag}>
+            <Text style={styles.tagText}>{feeling}</Text>
+          </View>
+        ))}
+      </View>
+      <CalendarStreak streak={userStreak}></CalendarStreak>
+      <Text style={[{textAlign: 'center', fontWeight: 'bold',}]}> {userStreak.length} day streak </Text>
+    </View>
+  );
+};
 const HomeScreen = ({ navigation }: Props) => {
   const [feeling, setFeeling] = useState('')
 
@@ -28,25 +86,21 @@ const HomeScreen = ({ navigation }: Props) => {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Logo */}
       {/* Header */}
-      <View>
+      <View style={styles.statusHeader}> 
         <Text style={styles.heading}>Hello, Khoa</Text>
-        <Text style={styles.subHeading}>How do you feel today?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Symptoms')}>
+          <Text style={styles.editText}> Edit </Text>
+        </TouchableOpacity>
       </View>
-      {/* Stats */}
-      <TouchableOpacity onPress={() => navigation.navigate('Symptoms')}>
-        <View
-          style={[
-            styles.attempts,
-            { backgroundColor: colors.primary, height: 200 }
-          ]}
-        >
-          <Text>Symptoms</Text>
-          <Text>Sexuality</Text>
-          <Text>Age</Text>
-          <Text>Frequencies</Text>
-          <Text>Streak</Text>
+      {/* Current */}
+      <CurrentStatus />
+
+      <ScrollView horizontal>
+        <View >
+
         </View>
-      </TouchableOpacity>
+
+      </ScrollView>
 
       {/* Attempts */}
       <View style={styles.attempts}>
@@ -259,17 +313,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
     alignSelf: 'center'
   },
-  card: {
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 16,
-    marginVertical: 8,
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    shadowOpacity: 0.1,
-    elevation: 2,
-  },
   title: {
     fontWeight: 'bold',
     fontSize: 15,
@@ -317,5 +360,74 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 17,
     marginBottom: 8,
+  }, 
+  tagRow: {
+    flexDirection: 'row',
+    alignItems: 'center', 
+    marginTop: 10, 
+    marginBottom: 20,
+  },
+  tag: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 15,
+    backgroundColor: colors.primary, 
+    marginRight: 8,
+  },
+  tagText: {
+    color: '#fff',
+    fontSize: 14,
+  },
+  card: {
+    backgroundColor: colors.white, // Assuming colors.white is the color of the card
+    marginBottom: 20,
+    marginTop: 20,
+    borderRadius: 20,
+    padding: 20, // Add padding to create space within the card
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 5,
+  }, 
+  statusHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center', // This ensures vertical centering
+  },
+  editText: {
+    fontSize: 14, 
+  },
+  streakContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 16,
+    paddingHorizontal: 8,
+  },
+  dayContainer: {
+    alignItems: 'center',
+  },
+  dayLabel: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 4,
+  },
+  dayIndicator: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#e0e0e0',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  activeDay: {
+    backgroundColor: colors.primary,
+  },
+  dayNumber: {
+    fontSize: 14,
+    color: '#333',
   }
 })
