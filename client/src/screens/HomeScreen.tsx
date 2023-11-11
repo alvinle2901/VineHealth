@@ -114,11 +114,51 @@ const HomeScreen = ({ navigation }: Props) => {
       </View>
 
       {/* Feedback */}
-      <Text>What's happening</Text>
+      <Text style={styles.header2}>What's happening</Text>
       <View style={{ marginBottom: 50 }}>
         {/* Profile img */}
-        <Text>Username</Text>
-        <Text>Comment</Text>
+      <View style={styles.card}>
+        <Text style={styles.title}>Going to the sauna</Text>
+        <View style={styles.reviewHeader}>
+        <Image style={styles.avatar} source={require('../../assets/images/image13.png')} />
+          <View style={styles.headerContent}>
+            <Text style={styles.name}>Daniel</Text>
+            <Text style={styles.time}>5m</Text>
+          </View>
+          <Text style={[styles.statusTag]}>
+          Sinusitis
+          </Text>
+        </View>
+        <Text style={styles.reviewText}>“Today is only the 2nd day my sinuses felt much better.”</Text>
+      </View>
+      <View style={styles.card}>
+        <Text style={styles.title}>Moisten Sinus</Text>
+        <View style={styles.reviewHeader}>
+        <Image style={styles.avatar} source={require('../../assets/images/image15.png')} />
+          <View style={styles.headerContent}>
+            <Text style={styles.name}>User123</Text>
+            <Text style={styles.time}>3h</Text>
+          </View>
+          <Text style={[styles.statusTag]}>
+          Wheezy breathing
+          </Text>
+        </View>
+        <Text style={styles.reviewText}>“It’s just not for me.”</Text>
+      </View>
+      <View style={styles.card}>
+        <Text style={styles.title}>Rinse nasal passages</Text>
+        <View style={styles.reviewHeader}>
+        <Image style={styles.avatar} source={require('../../assets/images/image14.png')} />
+          <View style={styles.headerContent}>
+            <Text style={styles.name}>Linda</Text>
+            <Text style={styles.time}>4h</Text>
+          </View>
+          <Text style={[styles.statusTag]}>
+          Sinusitis
+          </Text>
+        </View>
+        <Text style={styles.reviewText}>“Just try it for one day friends. Finally can breathe now.”</Text>
+      </View>
       </View>
     </ScrollView>
   )
@@ -219,4 +259,63 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
     alignSelf: 'center'
   },
+  card: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 16,
+    marginVertical: 8,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    shadowOpacity: 0.1,
+    elevation: 2,
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    marginBottom: 8,
+  },
+  reviewHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+  headerContent: {
+    flex: 1,
+    marginHorizontal: 10,
+  },
+  name: {
+    fontWeight: 'bold',
+  },
+  time: {
+    color: 'grey',
+  },
+  statusTag: {
+    color: 'white',
+    borderRadius: 15,
+    overflow: 'hidden',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    textAlign: 'center',
+    backgroundColor: colors.primary
+  },
+  reviewText: {
+    marginTop: 8,
+    fontSize: 11,
+  },
+  likeIcon: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+    fontSize: 24,
+  },
+  header2: {
+    fontWeight: 'bold',
+    fontSize: 17,
+    marginBottom: 8,
+  }
 })
