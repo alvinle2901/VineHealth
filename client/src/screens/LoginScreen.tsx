@@ -37,7 +37,7 @@ const LoginScreen = (props: Props) => {
       </View>
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>
-          <Text style={styles.footerText1}>ALREADY HAVE AN ACCOUNT? </Text>
+          <Text style={styles.footerText1}>DOESN'T HAVE AN ACCOUNT? </Text>
           <Text style={styles.footerText2}>SIGN UP</Text>
         </Text>
       </View>
