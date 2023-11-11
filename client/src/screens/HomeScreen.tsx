@@ -10,6 +10,8 @@ import React, { useState } from 'react'
 
 import { colors } from '../constants/colors'
 import { TextInput } from 'react-native-gesture-handler'
+import { getAuth } from 'firebase/auth'
+import { app } from '../../firebase.config'
 
 type Props = {
   navigation: any
@@ -17,6 +19,10 @@ type Props = {
 
 const HomeScreen = ({ navigation }: Props) => {
   const [feeling, setFeeling] = useState('')
+
+  const auth = getAuth(app)
+  console.log(auth)
+  
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

@@ -2,12 +2,30 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { colors } from '../constants/colors'
 import FormInput from '../components/FormInput'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { app } from '../../firebase.config'
 
-type Props = {}
+type Props = { navigation: any }
 
-const LoginScreen = (props: Props) => {
+const LoginScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const auth = getAuth(app)
+
+  const submitHandler = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user
+        navigation.navigate('Home')
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+        console.log(errorMessage)
+      })
+  }
 
   return (
     <View style={styles.container}>
@@ -30,7 +48,7 @@ const LoginScreen = (props: Props) => {
           />
         </View>
         {/* Login Button */}
-        <TouchableOpacity style={styles.loginButton}>
+        <TouchableOpacity style={styles.loginButton} onPress={submitHandler}>
           <Text style={styles.loginText}>LOG IN</Text>
         </TouchableOpacity>
         <Text style={styles.forgotPassword}>Forgot password?</Text>
@@ -38,7 +56,9 @@ const LoginScreen = (props: Props) => {
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>
           <Text style={styles.footerText1}>DOESN'T HAVE AN ACCOUNT? </Text>
-          <Text style={styles.footerText2}>SIGN UP</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+            <Text style={styles.footerText2}>SIGN UP</Text>
+          </TouchableOpacity>
         </Text>
       </View>
     </View>

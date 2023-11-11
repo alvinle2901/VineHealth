@@ -9,7 +9,7 @@ import Main from './navigations/Main'
 import Auth from './navigations/Auth'
 
 function App() {
-  const [isLogin, setIsLogin] = React.useState(true)
+  const [isLogin, setIsLogin] = React.useState(false)
   const [fontsLoaded] = useFonts({
     HelveticaNeue: require('./assets/fonts/HelveticaNeue.otf')
   })
