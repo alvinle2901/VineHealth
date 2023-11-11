@@ -9,7 +9,7 @@ import { useCallback } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 function App() {
-  const [isLogin, setIsLogin] = React.useState(false)
+  const [isLogin, setIsLogin] = React.useState(true)
   const [fontsLoaded] = useFonts({
     HelveticaNeue: require('./assets/fonts/HelveticaNeue.otf')
   })
