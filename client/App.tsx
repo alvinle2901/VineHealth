@@ -9,9 +9,10 @@ import Main from './navigations/Main'
 import Auth from './navigations/Auth'
 
 function App() {
-  const [isLogin, setIsLogin] = React.useState(false)
+  const [isLogin, setIsLogin] = React.useState(true)
   const [fontsLoaded] = useFonts({
-    HelveticaNeue: require('./assets/fonts/HelveticaNeue.otf')
+    HelveticaNeue: require('./assets/fonts/HelveticaNeue.otf'),
+    SFProText: require('./assets/fonts/SF-Pro-Text-Regular.otf')
   })
 
   const onLayoutRootView = useCallback(async () => {
