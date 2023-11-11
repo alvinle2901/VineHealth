@@ -8,10 +8,14 @@ import {
 } from 'react-native'
 import React from 'react'
 import { colors } from '../constants/colors'
+import { useNavigation } from '@react-navigation/native'
 
-type Props = {}
+type Props = {
+  navigation: any
+}
 
-const HomeScreen = (props: Props) => {
+const HomeScreen = ({navigation}: Props) => { 
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Logo */}
@@ -35,6 +39,7 @@ const HomeScreen = (props: Props) => {
           <View style={styles.footer}>
             <View>
               <TouchableOpacity
+              onPress={()=> navigation.navigate("Symptoms")}
                 style={[
                   styles.cardBtn,
                   { backgroundColor: colors.whiteShadeBg }
