@@ -18,7 +18,7 @@ const LoginScreen = ({ navigation }: Props) => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user
-        navigation.navigate('Home')
+        navigation.navigate('Main')
       })
       .catch((error) => {
         const errorCode = error.code
