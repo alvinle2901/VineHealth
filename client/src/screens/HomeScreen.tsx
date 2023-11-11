@@ -108,7 +108,8 @@ const HomeScreen = ({ navigation }: Props) => {
       </View>
 
       {/* Feedback */}
-      <View style={[styles.feedback, { marginBottom: 50 }]}>
+      <Text>What's happening</Text>
+      <View style={{ marginBottom: 50 }}>
         {/* Profile img */}
         <Text>Username</Text>
         <Text>Comment</Text>
@@ -212,12 +213,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
     alignSelf: 'center'
   },
-  feedback: {
-    backgroundColor: '#afdbc5',
-    marginBottom: 10,
-    marginTop: 20,
-    borderRadius: 20,
-    width: 'auto',
-    height: 120
-  }
 })
