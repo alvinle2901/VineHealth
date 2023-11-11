@@ -2,13 +2,31 @@ import { Text, TouchableOpacity, View, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
 import FormInput from '../components/FormInput'
 import { colors } from '../constants/colors'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 
-type Props = {}
+type Props = { navigation: any }
 
-const SignupScreen = (props: Props) => {
+const SignupScreen = ({ navigation }: Props) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const auth = getAuth()
+
+  const submitHandler = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed up
+        const user = userCredential.user
+        console.log(user)
+        // navigation.navigate('Home')
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+        // ..
+      })
+  }
 
   return (
     <View style={styles.container}>
@@ -17,11 +35,7 @@ const SignupScreen = (props: Props) => {
         <Text style={styles.h1}>Welcome!</Text>
         {/* TextInput */}
         <View style={styles.inputItem}>
-          <FormInput
-            placeHolder={'Name'}
-            value={name}
-            setValue={setName}
-          />
+          <FormInput placeHolder={'Name'} value={name} setValue={setName} />
         </View>
         <View style={styles.inputItem}>
           <FormInput
@@ -38,14 +52,14 @@ const SignupScreen = (props: Props) => {
           />
         </View>
         {/* Signup Button */}
-        <TouchableOpacity style={styles.signupButton} >
+        <TouchableOpacity style={styles.signupButton} onPress={submitHandler}>
           <Text style={styles.signupText}>SIGN UP</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>
           <Text style={styles.footerText1}>ALREADY HAVE AN ACCOUNT? </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text style={styles.footerText2}>LOG IN</Text>
           </TouchableOpacity>
         </Text>
@@ -109,4 +123,3 @@ export const styles = StyleSheet.create({
     alignSelf: 'center'
   }
 })
-

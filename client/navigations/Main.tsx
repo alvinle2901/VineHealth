@@ -17,7 +17,7 @@ const Main = (props: Props) => {
     >
       <Stack.Screen name="Main" component={Tabs} />
       <Stack.Screen name="Symptoms" component={Symptoms}/>
-      <Stack.Screen name="Remedy" component={Remedy}/>
+      {/* <Stack.Screen name="Remedy" component={Remedy}/> */}
     </Stack.Navigator>
   )
 }

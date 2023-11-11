@@ -8,7 +8,7 @@ const Auth = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName="Signup"
+      initialRouteName="Login"
       screenOptions={{
         headerShown: false
       }}
