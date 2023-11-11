@@ -16,7 +16,7 @@ const Tabs = (props: Props) => {
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        // headerShown: false,
+        headerShown: false,
         // tabBarShowLabel: false,
         tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: '#FF385C'
