@@ -1,9 +1,19 @@
-const express = require('express')
-const app = express()
+const app = require('./app')
+const cloudinary = require('cloudinary')
+const connectDatabase = require('./db/db')
 
-app.get('/', async (req, res) => {
-  res.send('Hello World!')
+const dotenv = require('dotenv')
+dotenv.config()
+// connect database
+connectDatabase()
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 })
-app.listen(3000, () => {
-  console.log('Server has started! Open http://localhost:3000')
+
+// create server
+const server = app.listen(process.env.PORT, () => {
+  console.log(`Server is working on http://localhost:${process.env.PORT}`)
 })
