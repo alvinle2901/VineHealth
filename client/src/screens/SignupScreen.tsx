@@ -19,11 +19,12 @@ const SignupScreen = ({ navigation }: Props) => {
         // Signed up
         const user = userCredential.user
         console.log(user)
-        // navigation.navigate('Home')
+        navigation.navigate('Home')
       })
       .catch((error) => {
         const errorCode = error.code
         const errorMessage = error.message
+        console.log(errorMessage)
         // ..
       })
   }
