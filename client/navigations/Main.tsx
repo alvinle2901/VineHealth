@@ -1,7 +1,7 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import Tabs from './Tabs'
 
+import Tabs from './Tabs'
 import Symptoms from '../src/screens/SymptomScreen'
 
 type Props = {}
