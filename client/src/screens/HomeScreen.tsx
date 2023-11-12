@@ -6,13 +6,16 @@ import {
   ScrollView,
   StyleSheet
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import { colors } from '../constants/colors'
 import { TextInput } from 'react-native-gesture-handler'
 import { getAuth } from 'firebase/auth'
 import { app } from '../../firebase.config'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { RadioButton } from 'react-native-paper'
+import { db } from '../../firebase.config'
+import { collection, addDoc, query, onSnapshot } from 'firebase/firestore'
 
 type Props = {
   navigation: any
@@ -46,14 +49,9 @@ const CalendarStreak = ({ streak }) => {
 
 const CurrentStatus = () => {
   // Define your tags and states here
-  const tags = [
-    { text: 'Sinusitis' },
-    { text: 'Women' },
-    { text: '38yr' },
-  ];
-  
-  const feelings = ['Wheezy breathing']; // This can be dynamic based on the state
-  const userStreak = ['2023-11-12', '2023-11-13'];
+  const tags = [{ text: 'Sinusitis' }, { text: 'Women' }, { text: '38yr' }]
+  const feelings = ['Wheezy breathing'] // This can be dynamic based on the state
+  const userStreak = ['2023-11-12', '2023-11-13']
 
   return (
     <View style={styles.card}>
@@ -80,10 +78,41 @@ const CurrentStatus = () => {
     </View>
   )
 }
+
 const HomeScreen = ({ navigation }: Props) => {
   const [feeling, setFeeling] = useState('')
   const [visible, setVisible] = useState(true)
   const [user, setUser] = useState('')
+  const [data, setData] = useState([])
+
+  const uploadData = async () => {
+    const docRef = await addDoc(collection(db, 'HealthVine'), {
+      name: user,
+      comment: feeling
+    })
+  }
+
+  // fetch data from firebase
+  const fetchData = async () => {
+    const q = query(collection(db, 'HealthVine'))
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const recipes = []
+      querySnapshot.forEach((doc) => {
+        const recipe = doc.data()
+        recipes.push({
+          name: recipe.name,
+          comment: recipe.comment
+        })
+        console.log(recipes)
+      })
+      setData(recipes)
+    })
+  }
+
+  useEffect(() => {
+    fetchData()
+    getData()
+  }, [])
 
   const getData = async () => {
     try {
@@ -97,12 +126,10 @@ const HomeScreen = ({ navigation }: Props) => {
     }
   }
 
-  React.useEffect(() => {
-    getData()
-  })
-
   const auth = getAuth(app)
   console.log(auth)
+
+  const [checked, setChecked] = React.useState('')
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -154,6 +181,39 @@ const HomeScreen = ({ navigation }: Props) => {
               >
                 Did you do this practice today?
               </Text>
+              <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    flexDirection: 'row'
+                  }}
+                >
+                  <RadioButton
+                    value="first"
+                    status={checked === 'first' ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                      setChecked('first')
+                      setVisible(!visible)
+                    }}
+                  />
+                  <Text>Yes</Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    flexDirection: 'row'
+                  }}
+                >
+                  <RadioButton
+                    value="second"
+                    status={checked === 'second' ? 'checked' : 'unchecked'}
+                    onPress={() => setChecked('second')}
+                  />
+                  <Text>No</Text>
+                </View>
+              </View>
             </View>
           ) : (
             <View
@@ -184,7 +244,10 @@ const HomeScreen = ({ navigation }: Props) => {
               {/* Button */}
               <View style={{ alignItems: 'center' }}>
                 <TouchableOpacity
-                  onPress={() => setVisible(!visible)}
+                  onPress={() => {
+                    setVisible(!visible)
+                    uploadData()
+                  }}
                   style={[
                     styles.cardBtn,
                     {
@@ -217,7 +280,7 @@ const HomeScreen = ({ navigation }: Props) => {
         <View style={{ marginBottom: 50 }}>
           {/* Profile img */}
           <View style={[styles.card, { marginBottom: 10 }]}>
-            <Text style={styles.title}>Going to the sauna</Text>
+            <Text style={styles.title}>{}</Text>
             <View style={styles.reviewHeader}>
               <Image
                 style={styles.avatar}
@@ -230,39 +293,7 @@ const HomeScreen = ({ navigation }: Props) => {
               <Text style={[styles.statusTag]}>Sinusitis</Text>
             </View>
             <Text style={styles.reviewText}>
-              “Today is only the 2nd day my sinuses felt much better.”
-            </Text>
-          </View>
-          <View style={styles.card}>
-            <Text style={styles.title}>Moisten Sinus</Text>
-            <View style={styles.reviewHeader}>
-              <Image
-                style={styles.avatar}
-                source={require('../../assets/images/image15.png')}
-              />
-              <View style={styles.headerContent}>
-                <Text style={styles.name}>User123</Text>
-                <Text style={styles.time}>3h</Text>
-              </View>
-              <Text style={[styles.statusTag]}>Wheezy breathing</Text>
-            </View>
-            <Text style={styles.reviewText}>“It’s just not for me.”</Text>
-          </View>
-          <View style={styles.card}>
-            <Text style={styles.title}>Rinse nasal passages</Text>
-            <View style={styles.reviewHeader}>
-              <Image
-                style={styles.avatar}
-                source={require('../../assets/images/image14.png')}
-              />
-              <View style={styles.headerContent}>
-                <Text style={styles.name}>Linda</Text>
-                <Text style={styles.time}>4h</Text>
-              </View>
-              <Text style={[styles.statusTag]}>Sinusitis</Text>
-            </View>
-            <Text style={styles.reviewText}>
-              “Just try it for one day friends. Finally can breathe now.”
+              “{data[0].comment}.”
             </Text>
           </View>
         </View>
