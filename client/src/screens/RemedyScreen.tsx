@@ -129,9 +129,9 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
     borderRadius: 20,
-    width: viewportWidth * 0.75, // Adjusted width to 90% of the screen width
-    minHeight: viewportHeight * 0.6, // Adjust height as necessary
-    padding: 20, // Add padding inside the card
+    width: viewportWidth * 0.75, // 75% of the screen width
+    height: viewportHeight * 0.7,
+    paddingBottom: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
