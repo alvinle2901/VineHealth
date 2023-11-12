@@ -10,6 +10,8 @@ type Props = {
 const SymptomScreen = ({navigation}: Props) => {
   const [selectedSymptom, setSelectedSymptom] = useState('');
   const [selectedFrequency, setSelectedFrequency] = useState('');
+  const [selectedGender, setSelectedGender] = useState('');
+  const [selectedAge, setSelectedAge] = useState('');
 
   const dataSymptom = [
     { label: 'Headache', value: 'headache' },
@@ -24,6 +26,14 @@ const SymptomScreen = ({navigation}: Props) => {
     // ... other frequency
   ];
 
+  const dataGender = [
+    { label: 'Male', value: 'male' },
+    { label: 'Female', value: 'female' },
+    { label: 'Rather not say', value: 'nosay' },
+  ]; 
+
+  const dataAge = Array.from({ length: 100 }, (_, i) => ({ label: `${i + 1}`, value: i + 1 }));
+
   const handleNavigate = () => {
     if (selectedSymptom === 'headache') {
       navigation.navigate('Remedy');
@@ -33,6 +43,31 @@ const SymptomScreen = ({navigation}: Props) => {
 
   return (
     <View style={styles.container}>
+
+    <Text style={styles.question}>How old are you?</Text>
+    <Dropdown
+      style={styles.dropdown}
+      data={dataAge}
+      labelField="label"
+      valueField="value"
+      value={selectedAge}
+      onChange={item => {
+        setSelectedAge(item.value);
+      }}
+    />
+
+      <Text style={styles.question}>Gender</Text>
+      <Dropdown
+        style={styles.dropdown}
+        data={dataGender}
+        labelField="label"
+        valueField="value"
+        value={selectedGender}
+        onChange={item => {
+          setSelectedGender(item.value);
+        }}
+      />
+
       <Text style={styles.question}>What is the symptom of your pain?</Text>
       <Dropdown
         style={styles.dropdown}
@@ -72,28 +107,41 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: colors.white,
-    justifyContent: 'center',
+    justifyContent: 'flex-start', // Distributes space evenly
   },
   question: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: colors.heading,
-    marginBottom: 20,
-    textAlign: 'left',
+    fontSize: 18, // Slightly reduced for better mobile readability
+    fontWeight: '500', // Not too bold
+    color: colors.heading, // Assuming you have a 'dark' color for text
+    marginBottom: 10, // Reduced bottom margin
+    marginTop: 20, // Space at the top for each question
   },
   dropdown: {
-    // Style your dropdown
+    backgroundColor: colors.whiteShadeBg, 
+    borderRadius: 10, 
+    padding: 15, 
+    marginBottom: 20, 
+    borderWidth: 1, 
+    borderColor: colors.gray, 
   },
   submitButton: {
-    padding: 15,
-    backgroundColor: colors.primary,
-    borderRadius: 20,
-    marginTop: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    backgroundColor: colors.primary, 
+    borderRadius: 30, 
+    shadowColor: colors.darkBg, 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    marginTop: 30, 
   },
   submitText: {
     color: colors.white,
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: 16, 
+    fontWeight: '600', 
   },
-  // ... other styles
+  
+
 });

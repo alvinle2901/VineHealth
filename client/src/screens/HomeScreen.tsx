@@ -46,9 +46,14 @@ const CalendarStreak = ({ streak }) => {
 
 const CurrentStatus = () => {
   // Define your tags and states here
-  const tags = [{ text: 'Sinusitis' }, { text: 'Women' }, { text: '38yr' }]
-  const feelings = ['Wheezy breathing'] // This can be dynamic based on the state
-  const userStreak = ['2023-11-06', '2023-11-07', '2023-11-08']
+  const tags = [
+    { text: 'Sinusitis' },
+    { text: 'Women' },
+    { text: '38yr' },
+  ];
+  
+  const feelings = ['Wheezy breathing']; // This can be dynamic based on the state
+  const userStreak = ['2023-11-12', '2023-11-13'];
 
   return (
     <View style={styles.card}>
