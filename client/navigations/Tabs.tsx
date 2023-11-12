@@ -1,11 +1,11 @@
 import React from 'react'
-import { Animated, Image, StyleSheet } from 'react-native'
+import { Animated, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { colors } from '../src/constants/colors'
 import { sizes } from '../src/constants/theme'
 
 import HomeScreen from '../src/screens/HomeScreen'
-import NewfeedScreen from '../src/screens/DiaryScreen'
+import DiaryScreen from '../src/screens/DiaryScreen'
 import ProfileScreen from '../src/screens/ProfileScreen'
 import RemedyScreen from '../src/screens/RemedyScreen'
 
@@ -18,19 +18,19 @@ const tabs = [
     icon: require('../assets/icons/home.png')
   },
   {
-    name: 'Remedy',
+    name: 'Suggestion',
     screen: RemedyScreen,
-    icon: require('../assets/icons/home.png')
+    icon: require('../assets/icons/suggestion.png')
   },
   {
     name: 'Newfeed',
-    screen: NewfeedScreen,
-    icon: require('../assets/icons/home.png')
+    screen: DiaryScreen,
+    icon: require('../assets/icons/diary.png')
   },
   {
     name: 'Profile',
     screen: ProfileScreen,
-    icon: require('../assets/icons/home.png')
+    icon: require('../assets/icons/profile.png')
   }
 ]
 
@@ -44,11 +44,18 @@ const Tabs = (props: Props) => {
       <Tab.Navigator
         initialRouteName="Home"
         screenOptions={{
-          headerShown: false,
+          // headerShown: false,
           tabBarShowLabel: false,
           tabBarHideOnKeyboard: true,
           tabBarActiveTintColor: '#8E97FD',
-          tabBarStyle: { height: 55 }
+          tabBarStyle: { height: 55 },
+          headerTitleAlign: 'center',
+          headerTitleStyle: { fontSize: 16 },
+          headerRight: () => (
+            <TouchableOpacity onPress={() => alert('This is a button!')}>
+              <Image source={require('../assets/icons/bells.png')} style={{width: 20, height: 20, marginRight: 20}} />
+            </TouchableOpacity>
+          )
         }}
       >
         {tabs.map(({ name, screen, icon }, index) => {
@@ -63,8 +70,8 @@ const Tabs = (props: Props) => {
                     <Image
                       source={icon}
                       style={{
-                        width: 40,
-                        height: 40,
+                        width: 25,
+                        height: 25,
                         tintColor: focused ? colors.primary : colors.gray
                       }}
                     />

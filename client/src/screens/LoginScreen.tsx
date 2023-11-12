@@ -2,10 +2,20 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { colors } from '../constants/colors'
 import FormInput from '../components/FormInput'
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { User, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { app } from '../../firebase.config'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 type Props = { navigation: any }
+
+const storeUser = async (value: string | User) => {
+  try {
+    const jsonValue = JSON.stringify(value)
+    await AsyncStorage.setItem('my-key', jsonValue)
+  } catch (e) {
+    // saving error
+  }
+}
 
 const LoginScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState('')
@@ -19,6 +29,8 @@ const LoginScreen = ({ navigation }: Props) => {
         // Signed in
         const user = userCredential.user
         navigation.navigate('Main')
+        console.log(user)
+        storeUser(user)
       })
       .catch((error) => {
         const errorCode = error.code

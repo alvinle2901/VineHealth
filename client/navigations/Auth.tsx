@@ -3,7 +3,6 @@ import LoginScreen from '../src/screens/LoginScreen'
 import SignUpScreen from '../src/screens/SignupScreen'
 import Main from '../navigations/Main'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { StackRouter } from '@react-navigation/native'
 
 const Auth = () => {
   const Stack = createNativeStackNavigator()
