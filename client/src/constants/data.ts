@@ -1,22 +1,21 @@
-export const items = [
+import { Remedy } from './modal'
+
+export const remedies: Remedy[] = [
   {
-    img: 'https://images.unsplash.com/photo-1583416750470-965b2707b355?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    name: 'Going to Sauna',
-    id: 1
+    id: 1,
+    title: 'GOING TO THE SAUNA',
+    duration: '15+',
+    calendar: '3 days',
+    info: 'Research shows that the heat from the sauna stimulates vasodilation — an opening of your blood vessels, which can improve oxygenation and reduce nasal inflammation. This helps make it easy to cough up the phlegm that might be causing congestion. To ease sinus infections, maintain a 10–15 minute sauna session routine for continuously 3 days. Once you have finished your sauna session, give yourself time to cool down before showering. Also, be sure to drink more fluids to replenish any possible losses from sweating and keep those',
+    img: require('../../assets/images/sauna.png')
   },
   {
-    img: 'https://plus.unsplash.com/premium_photo-1661775884128-d971ffd2d300?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    name: 'Go to sleep early',
-    id: 2
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1599577456698-e1e9ae4f4e5b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    name: 'Back Exercises',
-    id: 3
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1600679472233-eabc13b79f07?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    name: 'Drink enough water',
-    id: 4
+    id: 2,
+    title: 'RINSE NASAL PASSAGES',
+    duration: '5',
+    calendar: '2 weeks',
+    info: 'Research shows that the heat from the sauna stimulates vasodilation — an opening of your blood vessels, which can improve oxygenation and reduce nasal inflammation. This helps make it easy to cough up the phlegm that might be causing congestion.To ease sinus infections, maintain a 10–15 minute sauna session routine for continuously 3 days. Once you have finished your sauna session, give yourself time to cool down before showering. Also, be sure to drink more fluids to replenish any possible losses from sweating and keep those',
+    img: require('../../assets/images/rinse.png')
   }
+  // ...other remedies
 ]

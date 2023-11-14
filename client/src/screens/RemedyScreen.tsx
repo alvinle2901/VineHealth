@@ -3,44 +3,32 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
   TouchableOpacity,
   Image,
   ScrollView
 } from 'react-native'
 import Carousel from 'react-native-snap-carousel'
-import { colors } from '../constants/colors'
 
-const { width: viewportWidth, height: viewportHeight } =
-  Dimensions.get('window')
+import { colors } from '../constants/colors'
+import { Remedy } from '../constants/modal'
+import { remedies } from '../constants/data'
+import { sizes } from '../constants/theme'
+
+type Props = {
+  item: Remedy
+  index: any
+}
 
 const RemedyScreen = () => {
-  const [selectedRemedies, setSelectedRemedies] = useState({})
+  const [selectedRemedies, setSelectedRemedies] = useState<boolean[]>([])
   const [expandedCardIndex, setExpandedCardIndex] = useState(null)
-  const remedies = [
-    {
-      title: 'GOING TO THE SAUNA',
-      duration: '15+',
-      calendar: '3 days',
-      info: 'Research shows that the heat from the sauna stimulates vasodilation — an opening of your blood vessels, which can improve oxygenation and reduce nasal inflammation. This helps make it easy to cough up the phlegm that might be causing congestion. To ease sinus infections, maintain a 10–15 minute sauna session routine for continuously 3 days. Once you have finished your sauna session, give yourself time to cool down before showering. Also, be sure to drink more fluids to replenish any possible losses from sweating and keep those',
-      img: require('../../assets/images/sauna.png')
-    },
-    {
-      title: 'RINSE NASAL PASSAGES',
-      duration: '5',
-      calendar: '2 weeks',
-      info: 'Research shows that the heat from the sauna stimulates vasodilation — an opening of your blood vessels, which can improve oxygenation and reduce nasal inflammation. This helps make it easy to cough up the phlegm that might be causing congestion.To ease sinus infections, maintain a 10–15 minute sauna session routine for continuously 3 days. Once you have finished your sauna session, give yourself time to cool down before showering. Also, be sure to drink more fluids to replenish any possible losses from sweating and keep those',
-      img: require('../../assets/images/rinse.png')
-    }
-    // ...other remedies
-  ]
 
   const selectRemedy = (index: string | number) => {
     setSelectedRemedies((prevState) => ({
       ...prevState,
       [index]: !prevState[index]
     }))
-  }
+  } 
 
   const toggleCardExpansion = (index: React.SetStateAction<null>) => {
     setExpandedCardIndex(expandedCardIndex === index ? null : index)
@@ -67,7 +55,7 @@ const RemedyScreen = () => {
     )
   }
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({ item, index }: Props) => {
     const isSelected = selectedRemedies[index]
     const isExpanded = expandedCardIndex === index
     const infoPreview = `${item.info.substring(0, 100)}...`
@@ -122,8 +110,8 @@ const RemedyScreen = () => {
     <Carousel
       data={remedies}
       renderItem={renderItem}
-      sliderWidth={viewportWidth}
-      itemWidth={viewportWidth * 0.75}
+      sliderWidth={sizes.width}
+      itemWidth={sizes.width * 0.75}
       activeSlideAlignment={'center'}
       containerCustomStyle={styles.carouselContainer}
       inactiveSlideScale={0.94}
@@ -141,8 +129,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 20,
     padding: 20,
-    width: viewportWidth * 0.76, // 75% of the screen width
-    height: viewportHeight * 0.7,
+    width: sizes.width * 0.76, // 75% of the screen width
+    height: sizes.height * 0.7,
     paddingBottom: 20,
     shadowColor: '#000',
     shadowOffset: {
@@ -155,8 +143,6 @@ const styles = StyleSheet.create({
     marginBottom: 20 // Space between cards
   },
   cardHeader: {
-    marginBottom: 10
-    // Styles for the card header
   },
   title: {
     fontSize: 20,

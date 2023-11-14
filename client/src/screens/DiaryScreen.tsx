@@ -8,13 +8,13 @@ import {
   View,
   Image
 } from 'react-native'
-import { items } from '../constants/data'
+import { remedies } from '../constants/data'
 
 export default function DiaryScreen() {
   return (
     <SafeAreaView style={{ backgroundColor: 'white' }}>
       <ScrollView contentContainerStyle={styles.container}>
-        {items.map(({ img, name }, index) => {
+        {remedies.map(({ img, title }, index) => {
           return (
             <TouchableOpacity
               key={index}
@@ -28,13 +28,13 @@ export default function DiaryScreen() {
                     alt=""
                     resizeMode="cover"
                     style={styles.cardImg}
-                    source={{ uri: img }}
+                    source={img}
                   />
                 </View>
 
                 <View style={styles.cardBody}>
                   <View style={styles.cardHeader}>
-                    <Text style={styles.cardTitle}>{name}</Text>
+                    <Text style={styles.cardTitle}>{title}</Text>
                   </View>
                 </View>
               </View>
