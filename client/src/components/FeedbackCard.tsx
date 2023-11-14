@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
+
 import { colors } from '../constants/colors'
 import { Feedback } from '../constants/modal'
 
@@ -7,9 +8,8 @@ type Props = Feedback
 
 const FeedbackCard = ({ name, comment }: Props) => {
   return (
-    <View style={{ marginBottom: 50 }}>
-      {/* Profile img */}
-      <View style={[styles.card, { marginBottom: 10 }]}>
+    <View>
+      <View style={[styles.card]}>
         <Text style={styles.title}>{}</Text>
         <View style={styles.reviewHeader}>
           <Image
@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: colors.white, // Assuming colors.white is the color of the card
-    marginBottom: 20,
-    marginTop: 20,
+    marginBottom: 10,
+    marginTop: 10,
     borderRadius: 20,
     padding: 30, // Add padding to create space within the card
     shadowColor: '#000',

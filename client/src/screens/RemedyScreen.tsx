@@ -114,8 +114,9 @@ const RemedyScreen = () => {
       itemWidth={sizes.width * 0.75}
       activeSlideAlignment={'center'}
       containerCustomStyle={styles.carouselContainer}
-      inactiveSlideScale={0.94}
-      inactiveSlideOpacity={0.7}
+      inactiveSlideScale={0.92}
+      inactiveSlideOpacity={0.95}
+      loop
     />
   )
 }
@@ -125,11 +126,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   card: {
-    marginTop: 50,
-    backgroundColor: '#fff',
+    marginTop: 20,
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 20,
-    width: sizes.width * 0.76, // 75% of the screen width
+    width: sizes.width * 0.72, // 75% of the screen width
     height: sizes.height * 0.7,
     paddingBottom: 20,
     shadowColor: '#000',
@@ -140,7 +141,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 1,
     elevation: 2,
-    marginBottom: 20 // Space between cards
+    marginBottom: 30,
+    marginLeft: 10 // Space between cards
   },
   cardHeader: {
   },

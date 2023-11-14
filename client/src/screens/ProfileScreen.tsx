@@ -11,34 +11,15 @@ import {
   Switch
 } from 'react-native'
 import FeatherIcon from 'react-native-vector-icons/Feather'
-import { colors } from '../constants/colors'
 import { getAuth, signOut } from 'firebase/auth'
 import { app } from '../../firebase.config'
+
+import { colors } from '../constants/colors'
+import { SECTIONS } from '../constants/data'
 
 type Props = {
   navigation: any
 }
-
-const SECTIONS = [
-  {
-    header: 'Preferences',
-    items: [
-      { id: 'language', icon: 'globe', label: 'Language', type: 'select' },
-      { id: 'darkMode', icon: 'moon', label: 'Dark Mode', type: 'toggle' }
-    ]
-  },
-  {
-    header: 'Help',
-    items: [
-      { id: 'bug', icon: 'flag', label: 'Report Bug', type: 'link' },
-      { id: 'contact', icon: 'mail', label: 'Contact Us', type: 'link' }
-    ]
-  },
-  {
-    header: 'Account',
-    items: [{ id: 'logout', icon: 'log-out', label: 'Logout', type: 'link' }]
-  }
-]
 
 const ProfileScreen = ({ navigation }: Props) => {
   const [user, setUser] = useState('')
@@ -48,7 +29,7 @@ const ProfileScreen = ({ navigation }: Props) => {
     darkMode: true
   })
 
-  const getData = async () => {
+  const getUserData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('my-key')
       const value = jsonValue != null ? JSON.parse(jsonValue) : {}
@@ -63,7 +44,7 @@ const ProfileScreen = ({ navigation }: Props) => {
   const auth = getAuth(app)
 
   React.useEffect(() => {
-    getData()
+    getUserData()
   })
 
   return (
@@ -115,8 +96,8 @@ const ProfileScreen = ({ navigation }: Props) => {
                         if (id == 'logout') {
                           signOut(auth)
                             .then(async () => {
-                              await AsyncStorage.removeItem('my-key');
-                              navigation.navigate('Main', {screen: 'Login'})
+                              await AsyncStorage.removeItem('my-key')
+                              navigation.navigate('Main', { screen: 'Login' })
                             })
                             .catch((error) => {
                               console.log(error)

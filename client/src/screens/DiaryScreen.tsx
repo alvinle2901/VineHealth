@@ -8,9 +8,10 @@ import {
   View,
   Image
 } from 'react-native'
+
 import { remedies } from '../constants/data'
 
-export default function DiaryScreen() {
+const DiaryScreen = () => {
   return (
     <SafeAreaView style={{ backgroundColor: 'white' }}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -45,6 +46,8 @@ export default function DiaryScreen() {
     </SafeAreaView>
   )
 }
+
+export default DiaryScreen
 
 const styles = StyleSheet.create({
   container: {

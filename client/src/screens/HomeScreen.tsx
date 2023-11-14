@@ -1,47 +1,35 @@
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
   ScrollView,
   StyleSheet
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { RadioButton } from 'react-native-paper'
-import { TextInput } from 'react-native-gesture-handler'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { collection, addDoc, query, onSnapshot } from 'firebase/firestore'
-import { getAuth } from 'firebase/auth'
-import { app, db } from '../../firebase.config'
+import { collection, query, onSnapshot } from 'firebase/firestore'
+import { db } from '../../firebase.config'
 
 import { Feedback } from '../constants/modal'
 import { colors } from '../constants/colors'
+import { remedies } from '../constants/data'
 
 import FeedbackCard from '../components/FeedbackCard'
 import CurrentStatus from '../components/CurrentStatus'
+import PracticeCard from '../components/PracticeCard'
 
 type Props = {
   navigation: any
 }
 
 const HomeScreen = ({ navigation }: Props) => {
-  const [feeling, setFeeling] = useState('')
-  const [visible, setVisible] = useState(true)
   const [user, setUser] = useState('')
-  const [data, setData] = useState<Feedback[]>([
+  const [feedback, setFeedback] = useState<Feedback[]>([
     { name: 'abc', comment: '123' }
   ])
-  const [checked, setChecked] = React.useState('')
-
-  const uploadData = async () => {
-    const docRef = await addDoc(collection(db, 'HealthVine'), {
-      name: user,
-      comment: feeling
-    })
-  }
 
   // fetch data from firebase
-  const fetchData = async () => {
+  const fetchFeedbackData = async () => {
     const q = query(collection(db, 'HealthVine'))
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const recipes: Feedback[] = []
@@ -52,7 +40,7 @@ const HomeScreen = ({ navigation }: Props) => {
           comment: recipe.comment
         })
       })
-      setData(recipes)
+      setFeedback(recipes)
     })
   }
 
@@ -69,7 +57,7 @@ const HomeScreen = ({ navigation }: Props) => {
   }
 
   useEffect(() => {
-    fetchData()
+    fetchFeedbackData()
     getUserData()
   }, [])
 
@@ -84,142 +72,20 @@ const HomeScreen = ({ navigation }: Props) => {
         </View>
         {/* Current */}
         <CurrentStatus />
-        <Text style={styles.header2}>Current Practices</Text>
+
         {/* Practices */}
-        <ScrollView horizontal>
-          {visible ? (
-            <View
-              style={[
-                styles.card,
-                {
-                  marginLeft: 2,
-                  marginRight: 15,
-                  padding: 0,
-                  alignItems: 'center',
-                  width: 300,
-                  height: 250
-                }
-              ]}
-            >
-              <Image
-                source={require('../../assets/images/saunas.png')}
-                style={{ width: 300, height: 130 }}
-              />
-              <Text
-                style={{
-                  textTransform: 'uppercase',
-                  fontSize: 19,
-                  marginTop: 10,
-                  fontWeight: 'bold'
-                }}
-              >
-                Going to the sauna
-              </Text>
-              <Text
-                style={{
-                  fontSize: 15,
-                  marginTop: 10
-                }}
-              >
-                Did you do this practice today?
-              </Text>
-              <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    flexDirection: 'row'
-                  }}
-                >
-                  <RadioButton
-                    value="first"
-                    status={checked === 'first' ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                      setChecked('first')
-                      setVisible(!visible)
-                    }}
-                  />
-                  <Text>Yes</Text>
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    flexDirection: 'row'
-                  }}
-                >
-                  <RadioButton
-                    value="second"
-                    status={checked === 'second' ? 'checked' : 'unchecked'}
-                    onPress={() => setChecked('second')}
-                  />
-                  <Text>No</Text>
-                </View>
-              </View>
-            </View>
-          ) : (
-            <View
-              style={[
-                styles.card,
-                { width: 300, height: 250, backgroundColor: colors.primary }
-              ]}
-            >
-              {/* Card Title */}
-              <View style={[styles.cardContent]}>
-                <Text
-                  style={{
-                    color: colors.white,
-                    fontSize: 18,
-                    fontWeight: 'normal'
-                  }}
-                >
-                  How is your sleep quality?
-                </Text>
-              </View>
-              {/* Text Input */}
-              <TextInput
-                value={feeling}
-                style={styles.attemptInput}
-                placeholder={'How do you feel about it?'}
-                onChangeText={(e) => setFeeling(e)}
-              />
-              {/* Button */}
-              <View style={{ alignItems: 'center' }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setVisible(!visible)
-                    uploadData()
-                  }}
-                  style={[
-                    styles.cardBtn,
-                    {
-                      padding: 10,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderColor: 'white'
-                    }
-                  ]}
-                >
-                  <Text
-                    style={[
-                      {
-                        fontSize: 18,
-                        color: 'white',
-                        fontWeight: '300',
-                        marginTop: 20
-                      }
-                    ]}
-                  >
-                    SAVE
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
+        <Text style={styles.header2}>Current Practices</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {remedies.map(({ title, img }, index) => {
+            return <PracticeCard user={user} title={title} img={img} />
+          })}
         </ScrollView>
-        {/* Feedback */}
-        <Text style={styles.header2}>What's happening</Text>
-        {data.map(({ name, comment }, index) => {
+
+        {/* Feedbacks */}
+        <Text style={[styles.header2, { marginBottom: 20 }]}>
+          What's happening
+        </Text>
+        {feedback.map(({ name, comment }, index) => {
           return <FeedbackCard name={name} comment={comment} />
         })}
       </View>
@@ -242,89 +108,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 30
   },
-  subHeading: {
-    fontFamily: 'SFProText',
-    fontSize: 20,
-    fontWeight: '300',
-    marginTop: 10
-  },
-  section1: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 30,
-    marginBottom: 30
-  },
-  item1: {
-    backgroundColor: '#8E97FD',
-    flex: 1,
-    marginRight: 10,
-    marginBottom: 10,
-    marginTop: 10,
-    borderRadius: 20,
-    justifyContent: 'space-between',
-    overflow: 'hidden'
-  },
-  item2: {
-    backgroundColor: '#FFC97E',
-    flex: 1,
-    marginLeft: 10,
-    marginBottom: 10,
-    marginTop: 10,
-    borderRadius: 20,
-    overflow: 'hidden'
-  },
-  basicImg: {
-    alignSelf: 'flex-end'
-  },
-  cardContent: {
-    marginBottom: 20
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    fontFamily: 'SFProText'
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 15,
-    marginTop: '0%',
-    alignItems: 'center'
-  },
-  cardBtn: {
-    borderRadius: 50
-  },
-  btnLabel: {
-    fontFamily: 'SFProText',
-    fontSize: 12,
-    paddingTop: 10,
-    paddingBottom: 10,
-    marginLeft: 15,
-    marginRight: 15,
-    color: colors.heading
-  },
-  attempts: {
-    backgroundColor: 'white',
-    marginBottom: 10,
-    marginTop: 20,
-    borderRadius: 20,
-    width: 'auto',
-    height: 250
-  },
-  attemptInput: {
-    height: 100,
-    width: 250,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    paddingHorizontal: 50,
-    alignSelf: 'center'
-  },
   name: {
     fontWeight: 'bold'
   },
   header2: {
     fontWeight: 'bold',
-    fontSize: 22,
+    fontSize: 20,
     marginBottom: 8
   },
   card: {

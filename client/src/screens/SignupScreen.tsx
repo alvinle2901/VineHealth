@@ -1,7 +1,5 @@
 import { Text, TouchableOpacity, View, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
-import FormInput from '../components/FormInput'
-import { colors } from '../constants/colors'
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -9,6 +7,10 @@ import {
   User
 } from 'firebase/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+
+import { colors } from '../constants/colors'
+
+import FormInput from '../components/FormInput'
 
 type Props = { navigation: any }
 

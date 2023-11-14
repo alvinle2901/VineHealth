@@ -19,3 +19,24 @@ export const remedies: Remedy[] = [
   }
   // ...other remedies
 ]
+
+export const SECTIONS = [
+  {
+    header: 'Preferences',
+    items: [
+      { id: 'language', icon: 'globe', label: 'Language', type: 'select' },
+      { id: 'darkMode', icon: 'moon', label: 'Dark Mode', type: 'toggle' }
+    ]
+  },
+  {
+    header: 'Help',
+    items: [
+      { id: 'bug', icon: 'flag', label: 'Report Bug', type: 'link' },
+      { id: 'contact', icon: 'mail', label: 'Contact Us', type: 'link' }
+    ]
+  },
+  {
+    header: 'Account',
+    items: [{ id: 'logout', icon: 'log-out', label: 'Logout', type: 'link' }]
+  }
+]
