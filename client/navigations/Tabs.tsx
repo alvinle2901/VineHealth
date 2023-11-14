@@ -23,7 +23,7 @@ const tabs = [
     icon: require('../assets/icons/suggestion.png')
   },
   {
-    name: 'Newfeed',
+    name: 'Diary',
     screen: DiaryScreen,
     icon: require('../assets/icons/diary.png')
   },

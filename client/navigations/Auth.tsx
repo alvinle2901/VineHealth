@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import LoginScreen from '../src/screens/LoginScreen'
 import SignUpScreen from '../src/screens/SignupScreen'
 import Main from '../navigations/Main'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 const Auth = () => {
   const Stack = createNativeStackNavigator()
@@ -14,7 +14,7 @@ const Auth = () => {
         headerShown: false
       }}
     >
-      <Stack.Screen name="Main" component={Main}/>
+      <Stack.Screen name="Main" component={Main} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignUpScreen} />
     </Stack.Navigator>
