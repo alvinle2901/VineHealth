@@ -65,9 +65,12 @@ const HomeScreen = ({ navigation }: Props) => {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={{ margin: 20, marginTop: -20 }}>
         <View style={styles.statusHeader}>
+          {/* Header */}
           <Text style={styles.heading}>Hello, {user}!</Text>
+
+          {/* Edit Button */}
           <TouchableOpacity onPress={() => navigation.navigate('Symptoms')}>
-            <Text style={[styles.editText, { marginTop: 40 }]}> Edit </Text>
+            <Text style={[styles.editText, { marginTop: 35 }]}> Edit </Text>
           </TouchableOpacity>
         </View>
         {/* Current */}
@@ -138,6 +141,7 @@ const styles = StyleSheet.create({
     alignItems: 'center' // This ensures vertical centering
   },
   editText: {
-    fontSize: 14
+    fontSize: 14,
+    textDecorationLine: 'underline'
   }
 })
