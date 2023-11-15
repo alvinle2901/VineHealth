@@ -7,12 +7,19 @@ import {
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { collection, query, onSnapshot } from 'firebase/firestore'
+import {
+  collection,
+  query,
+  onSnapshot,
+  orderBy,
+  DocumentData
+} from 'firebase/firestore'
 import { db } from '../../firebase.config'
 
 import { Feedback } from '../constants/modal'
 import { colors } from '../constants/colors'
 import { remedies } from '../constants/data'
+import { timestampMillis } from '../utils/convertTime'
 
 import FeedbackCard from '../components/FeedbackCard'
 import CurrentStatus from '../components/CurrentStatus'
@@ -24,35 +31,57 @@ type Props = {
 
 const HomeScreen = ({ navigation }: Props) => {
   const [user, setUser] = useState('')
-  const [feedback, setFeedback] = useState<Feedback[]>([
-    { name: '', comment: '' }
-  ])
+  const [photoURL, setPhotoURL] = useState('')
+  const [expanded, setExpanded] = useState(false)
+  const [feedback, setFeedback] = useState<Feedback[]>([])
+
+  const collectIdsAndDocs = (doc: { id: any; data: () => any }) => {
+    return { id: doc.id, ...doc.data() }
+  }
 
   // fetch data from firebase
   const fetchFeedbackData = async () => {
-    const q = query(collection(db, 'HealthVine'))
+    const q = query(collection(db, 'Feedback'), orderBy('timeCreated', 'desc'))
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const recipes: Feedback[] = []
+      const myPosts = querySnapshot.docs.map(collectIdsAndDocs)
+      storeFeedback(myPosts)
+
       querySnapshot.forEach((doc) => {
         const recipe = doc.data()
         recipes.push({
           name: recipe.name,
-          comment: recipe.comment
+          comment: recipe.comment,
+          symptom: recipe.symptom,
+          photoURL: recipe.photoURL,
+          title: recipe.title,
+          timeCreated: timestampMillis(recipe.timeCreated)
         })
       })
       setFeedback(recipes)
     })
   }
 
+  // get UserData
   const getUserData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('my-key')
       const value = jsonValue != null ? JSON.parse(jsonValue) : {}
-      const name = value.displayName
-      setUser(name)
+      setUser(value.displayName)
+      setPhotoURL(value.photoURL)
       return
     } catch (e) {
       // error reading value
+    }
+  }
+
+  // Store Feedbacks
+  const storeFeedback = async (value: DocumentData) => {
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('feedback', jsonValue)
+    } catch (e) {
+      // saving error
     }
   }
 
@@ -70,7 +99,7 @@ const HomeScreen = ({ navigation }: Props) => {
 
           {/* Edit Button */}
           <TouchableOpacity onPress={() => navigation.navigate('Symptoms')}>
-            <Text style={[styles.editText, { marginTop: 35 }]}>Edit {'>'}</Text>
+            <Text style={[styles.editText, { marginTop: 40 }]}>Edit {'>'}</Text>
           </TouchableOpacity>
         </View>
         {/* Current */}
@@ -84,6 +113,7 @@ const HomeScreen = ({ navigation }: Props) => {
               <PracticeCard
                 user={user}
                 title={title}
+                photoURL={photoURL}
                 img={img}
                 id={id}
                 navigation={navigation}
@@ -96,15 +126,68 @@ const HomeScreen = ({ navigation }: Props) => {
         <Text style={[styles.header2, { marginBottom: 20 }]}>
           What's happening
         </Text>
-        {feedback.map(({ name, comment }, index) => {
-          return <FeedbackCard name={name} comment={comment} />
-        })}
+        {expanded ? (
+          <>
+            {feedback.map(
+              (
+                { name, comment, symptom, photoURL, title, timeCreated },
+                index
+              ) => {
+                return (
+                  <FeedbackCard
+                    name={name}
+                    comment={comment}
+                    symptom={symptom}
+                    photoURL={photoURL}
+                    title={title}
+                    timeCreated={timeCreated}
+                  />
+                )
+              }
+            )}
+          </>
+        ) : (
+          <>
+            {feedback
+              .slice(0, 3)
+              .map(
+                (
+                  { name, comment, symptom, photoURL, title, timeCreated },
+                  index
+                ) => {
+                  return (
+                    <FeedbackCard
+                      name={name}
+                      comment={comment}
+                      symptom={symptom}
+                      photoURL={photoURL}
+                      title={title}
+                      timeCreated={timeCreated}
+                    />
+                  )
+                }
+              )}
+          </>
+        )}
+
         {/* More button */}
-        <TouchableOpacity>
-          <Text style={[styles.editText, { alignSelf: 'center' }]}>
-            More {'>'}
-          </Text>
-        </TouchableOpacity>
+        {feedback.length > 3 && (
+          <TouchableOpacity
+            onPress={() => {
+              setExpanded(!expanded)
+            }}
+          >
+            {expanded ? (
+              <Text style={[styles.editText, { alignSelf: 'center' }]}>
+                Less {'>'}
+              </Text>
+            ) : (
+              <Text style={[styles.editText, { alignSelf: 'center' }]}>
+                More {'>'}
+              </Text>
+            )}
+          </TouchableOpacity>
+        )}
       </View>
       {/* Header */}
     </ScrollView>
@@ -134,11 +217,11 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   card: {
-    backgroundColor: colors.white, // Assuming colors.white is the color of the card
+    backgroundColor: colors.white,
     marginBottom: 20,
     marginTop: 20,
     borderRadius: 20,
-    padding: 30, // Add padding to create space within the card
+    padding: 30,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -152,7 +235,7 @@ const styles = StyleSheet.create({
   statusHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center' // This ensures vertical centering
+    alignItems: 'center'
   },
   editText: {
     fontSize: 14,

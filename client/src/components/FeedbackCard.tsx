@@ -3,37 +3,57 @@ import React from 'react'
 
 import { colors } from '../constants/colors'
 import { Feedback } from '../constants/modal'
+import { formatTimeAgo } from '../utils/convertTime'
 
 type Props = Feedback
 
-const FeedbackCard = ({ name, comment }: Props) => {
+const FeedbackCard = ({
+  name,
+  comment,
+  symptom,
+  photoURL,
+  title,
+  timeCreated
+}: Props) => {
+  const date = new Date(timeCreated)
   return (
     <View style={styles.card}>
       <View style={{ marginRight: 15 }}>
         {/* Image */}
-        <Image
-          style={styles.avatar}
-          source={require('../../assets/images/image13.png')}
-        />
+        <Image style={styles.avatar} source={{ uri: photoURL }} />
+
         {/* Time */}
-        <Text style={styles.time}>5m</Text>
+        <Text style={styles.time}>{formatTimeAgo(date)}</Text>
       </View>
       <View style={{ flex: 1 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={styles.titleContainer}>
           {/* Title */}
-          <Text style={styles.title}>SauNA</Text>
+          <Text style={styles.title}>{title}</Text>
+
           {/* Symptom */}
-          <Text style={[styles.statusTag]}>Sinusitis</Text>
+          <Text style={[styles.statusTag]}>{symptom}</Text>
         </View>
+
         {/* Name */}
         <View style={{ flexDirection: 'row', marginTop: 8 }}>
           <Text style={styles.header}>Name: </Text>
-          <Text style={styles.content}>"{name}"</Text>
+          <Text style={styles.content}>{name}</Text>
         </View>
+
         {/* Comment */}
         <View style={{ flexDirection: 'row' }}>
           <Text style={styles.header}>Review: </Text>
-          <Text style={styles.content}>"{comment}"</Text>
+          <Text
+            style={[
+              styles.content,
+              {
+                fontStyle: 'italic',
+                textAlign: 'justify'
+              }
+            ]}
+          >
+            "{comment}"
+          </Text>
         </View>
       </View>
     </View>
@@ -45,8 +65,14 @@ export default FeedbackCard
 const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 15,
     textTransform: 'uppercase'
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap'
   },
   avatar: {
     width: 60,
@@ -79,16 +105,16 @@ const styles = StyleSheet.create({
   },
   content: {
     fontSize: 14,
-    paddingVertical: 3,
-    fontStyle: 'italic'
+    paddingVertical: 3
   },
   card: {
-    backgroundColor: colors.white, // Assuming colors.white is the color of the card
-    marginBottom: 10,
-    marginTop: 10,
+    backgroundColor: colors.white,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 8,
     borderRadius: 20,
-    paddingHorizontal: 10, // Add padding to create space within the card
-    paddingVertical: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -96,8 +122,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 6,
-    elevation: 5,
-    overflow: 'hidden',
-    flexDirection: 'row'
+    elevation: 5
   }
 })
