@@ -1,12 +1,5 @@
 import React, { useState } from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  ScrollView
-} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 
 import { colors } from '../constants/colors'
@@ -14,95 +7,117 @@ import { Remedy } from '../constants/modal'
 import { remedies } from '../constants/data'
 import { sizes } from '../constants/theme'
 
-type Props = {
+type RemedyProps = {
   item: Remedy
   index: any
+  // navigation: any
 }
 
-const RemedyScreen = () => {
+type Props = {
+  navigation: any
+}
+
+const RemedyScreen = ({ navigation }: Props) => {
   const [selectedRemedies, setSelectedRemedies] = useState<boolean[]>([])
-  const [expandedCardIndex, setExpandedCardIndex] = useState(null)
 
   const selectRemedy = (index: string | number) => {
     setSelectedRemedies((prevState) => ({
       ...prevState,
       [index]: !prevState[index]
     }))
-  } 
-
-  const toggleCardExpansion = (index: React.SetStateAction<null>) => {
-    setExpandedCardIndex(expandedCardIndex === index ? null : index)
   }
 
-  const renderFeedback = () => {
-    return (
-      <View style={styles.feedbackCard}>
-        <View style={styles.reviewHeader}>
-          <Image
-            style={styles.avatar}
-            source={require('../../assets/images/image13.png')}
-          />
-          <View style={styles.headerContent}>
-            <Text style={styles.name}>Daniel</Text>
-            <Text style={styles.time}>5m</Text>
-          </View>
-          <Text style={styles.statusTag}>Sinusitis</Text>
-        </View>
-        <Text style={styles.reviewText}>
-          “Today is only the 2nd day my sinuses felt much better.”
-        </Text>
-      </View>
-    )
-  }
-
-  const renderItem = ({ item, index }: Props) => {
+  const renderItem = ({ item, index }: RemedyProps) => {
     const isSelected = selectedRemedies[index]
-    const isExpanded = expandedCardIndex === index
-    const infoPreview = `${item.info.substring(0, 100)}...`
+    const infoPreview = `${item.info.substring(0, 200)}...`
 
     if (isSelected) {
       // Render the selected state of the card
       return (
-        <View style={[styles.card, styles.cardSelected]}>
-          <Text style={styles.selectedTitle}>Good choice!</Text>
-          <Text style={styles.selectedInfo}>“{item.title}” is in progress</Text>
-        </View>
+        <>
+          <View style={[styles.card, styles.cardSelected]}>
+            <View style={{ top: '40%' }}>
+              <Text style={styles.selectedTitle}>Good choice!</Text>
+              <Text style={styles.selectedInfo}>
+                “{item.title}” is in progress
+              </Text>
+            </View>
+          </View>
+          {/* Pagination */}
+          <View style={styles.pagination}>
+            <Text style={styles.paginationText}>
+              {index + 1}/{remedies.length}
+            </Text>
+          </View>
+        </>
       )
     }
 
     return (
-      <ScrollView style={styles.card}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.title}>{item.title}</Text>
-          <View style={styles.infoSection}>
-            <Text style={styles.infoText}>{item.duration} minutes</Text>
-            <Text style={styles.infoText}>{item.calendar}</Text>
+      <>
+        <View style={styles.card}>
+          <View>
+            {/* Image */}
+            <Image source={item.img} style={styles.image} />
+            <View style={styles.contentContainer}>
+              {/* Title */}
+              <Text style={styles.title}>{item.title}</Text>
+
+              <View style={styles.infoSection}>
+                {/* Duration */}
+                <View style={styles.infoContainer}>
+                  <Image
+                    source={require('../../assets/icons/clock.png')}
+                    style={{ width: 18, height: 18 }}
+                  />
+                  <Text style={styles.infoText}>{item.duration} mins</Text>
+                </View>
+                {/* Calendar */}
+                <View style={styles.infoContainer}>
+                  <Image
+                    source={require('../../assets/icons/calendar.png')}
+                    style={{ width: 18, height: 18 }}
+                  />
+                  <Text style={styles.infoText}>{item.calendar}</Text>
+                </View>
+              </View>
+
+              {/* Info */}
+              <Text style={styles.description}>{infoPreview}</Text>
+
+              {/* More button */}
+              <TouchableOpacity
+                onPress={() => {
+                  // To Detail Screen
+                  navigation.navigate('Detail', {
+                    item: item
+                  })
+                }}
+              >
+                <Text style={styles.moreText}>
+                  more {'>'}
+                  {'>'}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
+
+          {/* Button */}
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => selectRemedy(index)}
+          >
+            <Text style={styles.actionButtonText}>I'll do it</Text>
+          </TouchableOpacity>
         </View>
 
-        <Text style={styles.description}>
-          {isExpanded ? item.info : infoPreview}
-        </Text>
-
-        {isExpanded && renderFeedback()}
-
-        {item.info.length > 100 && ( // Only show "read more" if the info is longer than 100 characters
-          <TouchableOpacity onPress={() => toggleCardExpansion(index)}>
-            <Text style={styles.readMoreText}>
-              {isExpanded ? 'read less' : 'read more'}
-            </Text>
-          </TouchableOpacity>
-        )}
-
-        <Image source={item.img} style={styles.image} />
-
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => selectRemedy(index)}
-        >
-          <Text style={styles.actionButtonText}>I'll do it</Text>
-        </TouchableOpacity>
-      </ScrollView>
+        {/* Pagination */}
+        <View style={styles.pagination}>
+          <Text style={styles.paginationText}>
+            {index + 1}/{remedies.length}
+          </Text>
+        </View>
+      </>
     )
   }
 
@@ -114,24 +129,22 @@ const RemedyScreen = () => {
       itemWidth={sizes.width * 0.75}
       activeSlideAlignment={'center'}
       containerCustomStyle={styles.carouselContainer}
-      inactiveSlideScale={0.92}
-      inactiveSlideOpacity={0.95}
-      loop
+      inactiveSlideScale={0.75}
+      inactiveSlideOpacity={0.88}
     />
   )
 }
 
 const styles = StyleSheet.create({
   carouselContainer: {
-    backgroundColor: 'white'
+    backgroundColor: '#F9F9F9'
   },
   card: {
-    marginTop: 20,
+    marginTop: 50,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 20,
-    width: sizes.width * 0.72, // 75% of the screen width
-    height: sizes.height * 0.7,
+    width: sizes.width * 0.75, // 75% of the screen width
+    height: sizes.height * 0.68,
     paddingBottom: 20,
     shadowColor: '#000',
     shadowOffset: {
@@ -141,49 +154,58 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 1,
     elevation: 2,
-    marginBottom: 30,
-    marginLeft: 10 // Space between cards
+    marginLeft: 5,
+    justifyContent: 'space-between',
+    overflow: 'hidden'
   },
-  cardHeader: {
+  contentContainer: {
+    paddingVertical: 5,
+    paddingHorizontal: 15
   },
   title: {
-    fontSize: 20,
+    fontSize: 17,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 10
+    marginBottom: 14
   },
   infoSection: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginBottom: 10
+    marginBottom: 15
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
   infoText: {
-    // Styles for the info texts
+    fontSize: 12,
+    marginLeft: 5
   },
   description: {
     fontSize: 14,
     color: '#333',
     textAlign: 'justify',
-    marginBottom: 10
+    lineHeight: 20
   },
   image: {
     width: '100%',
-    height: 200, // Adjust the height as necessary
-    borderRadius: 10, // Optional: if you want rounded corners
+    height: 180,
     marginBottom: 10
   },
   actionButton: {
-    backgroundColor: colors.primary, // Use your primary color here
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 25,
-    alignSelf: 'center'
+    paddingVertical: 6,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    alignSelf: 'center',
+    borderColor: colors.primary,
+    borderWidth: 1
   },
   actionButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    textAlign: 'center'
+    color: colors.primary,
+    fontSize: 16,
+    textAlign: 'center',
+    fontWeight: '300'
   },
   cardSelected: {
     backgroundColor: colors.primary
@@ -193,7 +215,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
-    marginBottom: 10
+    marginBottom: 20
   },
   selectedInfo: {
     fontSize: 16,
@@ -201,65 +223,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 20
   },
-  readMoreText: {
+  moreText: {
     color: colors.primary,
-    fontWeight: 'bold',
-    marginTop: 5
+    fontWeight: '300',
+    marginTop: 5,
+    alignSelf: 'center',
+    textDecorationLine: 'underline'
   },
-  reviewHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10, // Add some margin at the top
-    paddingHorizontal: 10 // Add some padding on the sides
+  pagination: {
+    alignSelf: 'center',
+    marginVertical: 30
   },
-  avatar: {
-    width: 40, // Adjust the size as needed
-    height: 40, // Adjust the size as needed
-    borderRadius: 20, // Half the size of width/height to make it circular
-    marginRight: 10 // Add some margin between the avatar and the text
-  },
-  headerContent: {
-    flex: 1,
-    justifyContent: 'center' // Center the content vertically
-  },
-  name: {
-    fontWeight: 'bold',
-    fontSize: 14 // Adjust the font size as needed
-  },
-  time: {
+  paginationText: {
     color: 'grey',
     fontSize: 12
-  },
-  statusTag: {
-    color: 'white',
-    backgroundColor: colors.primary,
-    borderRadius: 15,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    alignSelf: 'flex-start'
-  },
-  reviewText: {
-    marginTop: 10,
-    fontSize: 14,
-    color: '#333',
-    lineHeight: 20,
-    textAlign: 'left'
-  },
-  feedbackCard: {
-    backgroundColor: '#f0fff', // Slightly different color from the main card
-    borderRadius: 10, // Less rounded than the main card
-    padding: 10, // Less padding than the main card
-    marginTop: 10, // Space from the main card content
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1
-    },
-    shadowOpacity: 0.18,
-    shadowRadius: 1.0,
-    elevation: 1,
-    width: '90%', // Smaller width than the main card
-    alignSelf: 'center' // Center the card within the main card
   }
 })
 

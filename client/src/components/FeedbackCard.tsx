@@ -60,16 +60,17 @@ const styles = StyleSheet.create({
   time: {
     color: 'grey',
     alignSelf: 'center',
-    fontSize: 12
+    fontSize: 11
   },
   statusTag: {
-    color: 'white',
+    color: colors.primary,
     borderRadius: 15,
     overflow: 'hidden',
     paddingHorizontal: 10,
     paddingVertical: 2,
     textAlign: 'center',
-    backgroundColor: colors.primary
+    backgroundColor: '#EDEFF1',
+    fontWeight: '500'
   },
   header: {
     fontSize: 14,
