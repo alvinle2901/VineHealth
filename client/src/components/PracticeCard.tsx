@@ -13,6 +13,9 @@ import { db } from '../../firebase.config'
 
 import { colors } from '../constants/colors'
 
+import CloseButton from './CloseButton'
+import RadioSleepQuality from './RadioSleepQuality'
+
 type Props = {
   user: string
   img: any
@@ -32,27 +35,17 @@ const PracticeCard = ({ user, title, img }: Props) => {
     })
   }
 
+  const handleVisible = () => {
+    setVisible(true)
+  }
+
   return (
     <>
       {visible ? (
         <View style={styles.card}>
           <Image source={img} style={{ width: 300, height: 130 }} />
-          <Text
-            style={{
-              textTransform: 'uppercase',
-              fontSize: 19,
-              marginTop: 10,
-              fontWeight: 'bold'
-            }}
-          >
-            {title}
-          </Text>
-          <Text
-            style={{
-              fontSize: 15,
-              marginTop: 10
-            }}
-          >
+          <Text style={styles.cardTitle}>{title}</Text>
+          <Text style={styles.cardSubTitle}>
             Did you do this practice today?
           </Text>
           <View style={{ flexDirection: 'row', marginVertical: 10 }}>
@@ -88,82 +81,55 @@ const PracticeCard = ({ user, title, img }: Props) => {
                 }
               ]}
             >
-              <TouchableOpacity
-                style={{ alignSelf: 'flex-end', margin: 15 }}
-                onPress={() => setVisible(true)}
-              >
-                <Image
-                  source={require('../../assets/icons/x.png')}
-                  style={{ width: 20, height: 15, tintColor: 'white' }}
-                />
-              </TouchableOpacity>
+              <CloseButton handleVisible={handleVisible} />
+              {/* Content */}
+              <View style={{ top: '40%' }}>
+                <Text style={[styles.cardText, { alignSelf: 'center' }]}>
+                  Thank you
+                </Text>
+                <Text style={styles.cardText}>
+                  Your session has been saved!
+                </Text>
+              </View>
             </View>
           ) : (
             <View
               style={[
                 styles.card,
                 {
-                  backgroundColor: colors.primary
+                  backgroundColor: colors.primary,
+                  alignItems: 'flex-start',
+                  paddingHorizontal: 10,
+                  paddingTop: 20
                 }
               ]}
             >
-              <TouchableOpacity
-                style={{ alignSelf: 'flex-end', margin: 15 }}
-                onPress={() => setVisible(true)}
-              >
-                <Image
-                  source={require('../../assets/icons/x.png')}
-                  style={{ width: 20, height: 15, tintColor: 'white' }}
-                />
-              </TouchableOpacity>
-              {/* Card Title */}
-              <View style={[styles.cardContent]}>
-                <Text
-                  style={{
-                    color: colors.white,
-                    fontSize: 18,
-                    fontWeight: 'normal'
-                  }}
-                >
-                  How is your sleep quality?
-                </Text>
-              </View>
-              {/* Text Input */}
+              <CloseButton handleVisible={handleVisible} />
+              {/* Sleep Quality */}
+              <Text style={[styles.cardText]}>How is your sleep quality?</Text>
+
+              {/* Radio Buttons */}
+              <RadioSleepQuality />
+
+              {/* Comment */}
+              <Text style={[styles.cardText]}>Comment</Text>
               <TextInput
                 value={feeling}
                 style={styles.attemptInput}
-                placeholder={'How do you feel about it?'}
+                placeholder={'Your feedback'}
                 onChangeText={(e) => setFeeling(e)}
+                multiline
               />
+
               {/* Button */}
-              <View style={{ alignItems: 'center' }}>
+              <View style={styles.cardBtn}>
                 <TouchableOpacity
                   onPress={() => {
                     setUploaded(true)
                     uploadData()
                   }}
-                  style={[
-                    styles.cardBtn,
-                    {
-                      padding: 10,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderColor: 'white'
-                    }
-                  ]}
                 >
-                  <Text
-                    style={[
-                      {
-                        fontSize: 18,
-                        color: 'white',
-                        fontWeight: '300',
-                        marginTop: 20
-                      }
-                    ]}
-                  >
-                    SAVE
-                  </Text>
+                  <Text style={styles.buttonText}>SAVE</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -178,7 +144,7 @@ export default PracticeCard
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.white, // Assuming colors.white is the color of the card
+    backgroundColor: colors.white,
     marginBottom: 20,
     marginTop: 20,
     borderRadius: 20,
@@ -192,25 +158,23 @@ const styles = StyleSheet.create({
     elevation: 5,
     overflow: 'hidden',
     width: 300,
-    height: 250,
+    height: 260,
     marginLeft: 2,
     marginRight: 15,
-    padding: 0,
     alignItems: 'center'
   },
-  cardContent: {
-    marginBottom: 20
-  },
   attemptInput: {
+    width: '100%',
     height: 100,
-    width: 250,
     borderRadius: 10,
     backgroundColor: 'white',
-    paddingHorizontal: 50,
-    alignSelf: 'center'
+    padding: 10,
+    textAlignVertical: 'top'
   },
   cardBtn: {
-    borderRadius: 50
+    borderRadius: 20,
+    padding: 10,
+    alignSelf: 'center'
   },
   radioContainer: {
     flex: 1,
@@ -218,5 +182,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     paddingHorizontal: 20
+  },
+  cardTitle: {
+    textTransform: 'uppercase',
+    fontSize: 19,
+    marginTop: 10,
+    fontWeight: 'bold'
+  },
+  cardSubTitle: {
+    fontSize: 15,
+    marginTop: 10
+  },
+  cardText: {
+    fontSize: 16,
+    color: 'white',
+    fontWeight: '500',
+    marginBottom: 5
+  },
+  buttonText: {
+    fontSize: 17,
+    color: 'white'
   }
 })

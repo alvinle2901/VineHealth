@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
     borderRadius: 20,
-    padding: 30, // Add padding to create space within the card
+    padding: 10, // Add padding to create space within the card
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
