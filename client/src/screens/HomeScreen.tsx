@@ -109,13 +109,13 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flex: 1,
-    backgroundColor: colors.white
+    backgroundColor: '#F9F9F9'
   },
   heading: {
     fontFamily: 'SFProText',
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: 'bold',
-    marginTop: 30
+    marginTop: 40
   },
   name: {
     fontWeight: 'bold'

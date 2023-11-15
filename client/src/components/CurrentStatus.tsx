@@ -11,25 +11,27 @@ const CurrentStatus = () => {
 
   return (
     <View style={styles.card}>
+      {/* Info tags */}
       <View style={styles.tagRow}>
         {tags.map((tag, index) => (
-          <View key={index} style={[styles.tag]}>
+          <View key={index} style={styles.tag}>
             <Text style={styles.tagText}>{tag.text}</Text>
           </View>
         ))}
       </View>
+      {/* Symptoms */}
       <View style={styles.tagRow}>
-        <Text>Today, I'm feeling: </Text>
+        <Text style={styles.header}>Today, I'm feeling:</Text>
         {feelings.map((feeling, index) => (
-          <View key={index} style={styles.tag}>
-            <Text style={styles.tagText}>{feeling}</Text>
+          <View key={index} style={styles.sympTag}>
+            <Text style={styles.sympText}>{feeling}</Text>
           </View>
         ))}
       </View>
+      {/* Streak */}
       <CalendarStreak streak={userStreak} />
       <Text style={[{ textAlign: 'center', fontWeight: 'bold' }]}>
-        {' '}
-        {userStreak.length} day streak{' '}
+        {userStreak.length} day streak
       </Text>
     </View>
   )
@@ -56,18 +58,35 @@ const styles = StyleSheet.create({
   tagRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20
+    marginVertical: 10
   },
   tag: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 15,
+    backgroundColor: '#EDEFF1',
+    marginRight: 8
+  },
+  tagText: {
+    color: colors.primary,
+    fontSize: 13,
+    fontWeight: '500'
+  },
+  sympTag: {
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 15,
     backgroundColor: colors.primary,
     marginRight: 8
   },
-  tagText: {
+  sympText: {
     color: '#fff',
-    fontSize: 14
+    fontSize: 15,
+    fontWeight: '600'
+  },
+  header: {
+    fontSize: 16,
+    textDecorationLine: 'underline',
+    marginRight: 10,
   }
 })

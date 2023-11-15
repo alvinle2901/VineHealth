@@ -28,6 +28,7 @@ const PracticeCard = ({ user, title, img }: Props) => {
   const [checked, setChecked] = useState('')
   const [feeling, setFeeling] = useState('')
 
+  // upload Feedback
   const uploadData = async () => {
     const docRef = await addDoc(collection(db, 'Feedback'), {
       name: user,
@@ -35,6 +36,7 @@ const PracticeCard = ({ user, title, img }: Props) => {
     })
   }
 
+  // handle between card content and card upload feedback
   const handleVisible = () => {
     setVisible(true)
   }
@@ -48,6 +50,7 @@ const PracticeCard = ({ user, title, img }: Props) => {
           <Text style={styles.cardSubTitle}>
             Did you do this practice today?
           </Text>
+          {/* Yes/No buttons */}
           <View style={{ flexDirection: 'row', marginVertical: 10 }}>
             <View style={styles.radioContainer}>
               <RadioButton
@@ -71,6 +74,7 @@ const PracticeCard = ({ user, title, img }: Props) => {
           </View>
         </View>
       ) : (
+        // Success upload card
         <>
           {uploaded ? (
             <View
@@ -93,6 +97,7 @@ const PracticeCard = ({ user, title, img }: Props) => {
               </View>
             </View>
           ) : (
+            // Upload feedback card
             <View
               style={[
                 styles.card,
@@ -121,7 +126,7 @@ const PracticeCard = ({ user, title, img }: Props) => {
                 multiline
               />
 
-              {/* Button */}
+              {/* Upload button */}
               <View style={styles.cardBtn}>
                 <TouchableOpacity
                   onPress={() => {

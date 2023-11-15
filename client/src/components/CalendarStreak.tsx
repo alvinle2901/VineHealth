@@ -18,7 +18,7 @@ const CalendarStreak = ({ streak }: Props) => {
       {daysInWeek.map((day, index) => (
         <View key={index} style={styles.dayContainer}>
           <Text style={styles.dayLabel}>
-            {day.format('dd').charAt(0)} {/* First letter of the day */}
+            {day.format('ddd')} {/* First letter of the day */}
           </Text>
           <View
             style={[
@@ -26,7 +26,16 @@ const CalendarStreak = ({ streak }: Props) => {
               streak.includes(day.format('YYYY-MM-DD')) ? styles.activeDay : {}
             ]}
           >
-            <Text style={styles.dayNumber}>{day.format('D')}</Text>
+            <Text
+              style={[
+                styles.dayNumber,
+                streak.includes(day.format('YYYY-MM-DD'))
+                  ? styles.activeNumber
+                  : {}
+              ]}
+            >
+              {day.format('D')}
+            </Text>
           </View>
         </View>
       ))}
@@ -40,22 +49,22 @@ const styles = StyleSheet.create({
   streakContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 16,
-    paddingHorizontal: 8
+    paddingVertical: 16
   },
   dayContainer: {
     alignItems: 'center'
   },
   dayLabel: {
-    fontSize: 16,
+    fontSize: 12,
     color: '#333',
-    marginBottom: 4
+    marginBottom: 4,
+    textTransform: 'uppercase'
   },
   dayIndicator: {
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#EDEFF1',
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -63,7 +72,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary
   },
   dayNumber: {
-    fontSize: 14,
+    fontSize: 15,
     color: '#333'
+  },
+  activeNumber: {
+    fontSize: 15,
+    color: 'white'
   }
 })
