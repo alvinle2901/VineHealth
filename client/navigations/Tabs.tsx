@@ -50,7 +50,7 @@ const Tabs = (props: Props) => {
           tabBarActiveTintColor: '#8E97FD',
           tabBarStyle: { height: 55 },
           headerTitleAlign: 'center',
-          headerTitleStyle: { fontSize: 16 },
+          headerTitleStyle: { fontSize: 16, fontWeight: '200' },
           headerRight: () => (
             <TouchableOpacity onPress={() => alert('This is a button!')}>
               <Image source={require('../assets/icons/bells.png')} style={{width: 20, height: 20, marginRight: 20}} />

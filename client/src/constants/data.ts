@@ -2,7 +2,7 @@ import { Remedy } from './modal'
 
 export const remedies: Remedy[] = [
   {
-    id: 1,
+    id: 0,
     title: 'GOING TO THE SAUNA',
     duration: '15+',
     calendar: '3 days',
@@ -10,7 +10,7 @@ export const remedies: Remedy[] = [
     img: require('../../assets/images/sauna.png')
   },
   {
-    id: 2,
+    id: 1,
     title: 'RINSE NASAL PASSAGES',
     duration: '5',
     calendar: '2 weeks',
