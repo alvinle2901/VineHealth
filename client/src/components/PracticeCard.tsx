@@ -12,6 +12,7 @@ import { addDoc, collection } from 'firebase/firestore'
 import { db } from '../../firebase.config'
 
 import { colors } from '../constants/colors'
+import { remedies } from '../constants/data'
 
 import CloseButton from './CloseButton'
 import RadioSleepQuality from './RadioSleepQuality'
@@ -20,9 +21,11 @@ type Props = {
   user: string
   img: any
   title: string
+  id: number
+  navigation: any
 }
 
-const PracticeCard = ({ user, title, img }: Props) => {
+const PracticeCard = ({ user, title, img, id, navigation }: Props) => {
   const [visible, setVisible] = useState(true)
   const [uploaded, setUploaded] = useState(false)
   const [checked, setChecked] = useState('')
@@ -45,33 +48,44 @@ const PracticeCard = ({ user, title, img }: Props) => {
     <>
       {visible ? (
         <View style={styles.card}>
-          <Image source={img} style={{ width: 300, height: 130 }} />
-          <Text style={styles.cardTitle}>{title}</Text>
-          <Text style={styles.cardSubTitle}>
-            Did you do this practice today?
-          </Text>
-          {/* Yes/No buttons */}
-          <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-            <View style={styles.radioContainer}>
-              <RadioButton
-                value="first"
-                status={checked === 'first' ? 'checked' : 'unchecked'}
-                onPress={() => {
-                  setChecked('first')
-                  setVisible(!visible)
-                }}
-              />
-              <Text>Yes</Text>
+          <TouchableOpacity
+            style={styles.container}
+            onPress={() => {
+              // To Detail Screen
+              navigation.navigate('Detail', { item: remedies[id] })
+            }}
+          >
+            {/* Image */}
+            <Image source={img} style={{ width: 300, height: 130 }} />
+
+            <Text style={styles.cardTitle}>{title}</Text>
+            <Text style={styles.cardSubTitle}>
+              Did you do this practice today?
+            </Text>
+
+            {/* Yes/No buttons */}
+            <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+              <View style={styles.radioContainer}>
+                <RadioButton
+                  value="first"
+                  status={checked === 'first' ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setChecked('first')
+                    setVisible(!visible)
+                  }}
+                />
+                <Text>Yes</Text>
+              </View>
+              <View style={styles.radioContainer}>
+                <RadioButton
+                  value="second"
+                  status={checked === 'second' ? 'checked' : 'unchecked'}
+                  onPress={() => setChecked('second')}
+                />
+                <Text>No</Text>
+              </View>
             </View>
-            <View style={styles.radioContainer}>
-              <RadioButton
-                value="second"
-                status={checked === 'second' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('second')}
-              />
-              <Text>No</Text>
-            </View>
-          </View>
+          </TouchableOpacity>
         </View>
       ) : (
         // Success upload card
@@ -165,7 +179,9 @@ const styles = StyleSheet.create({
     width: 300,
     height: 260,
     marginLeft: 2,
-    marginRight: 15,
+    marginRight: 15
+  },
+  container: {
     alignItems: 'center'
   },
   attemptInput: {

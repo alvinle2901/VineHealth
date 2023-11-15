@@ -25,7 +25,7 @@ type Props = {
 const HomeScreen = ({ navigation }: Props) => {
   const [user, setUser] = useState('')
   const [feedback, setFeedback] = useState<Feedback[]>([
-    { name: 'abc', comment: '123' }
+    { name: '', comment: '' }
   ])
 
   // fetch data from firebase
@@ -79,8 +79,16 @@ const HomeScreen = ({ navigation }: Props) => {
         {/* Practices */}
         <Text style={styles.header2}>Current Practices</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {remedies.map(({ title, img }, index) => {
-            return <PracticeCard user={user} title={title} img={img} />
+          {remedies.map(({ title, img, id }, index) => {
+            return (
+              <PracticeCard
+                user={user}
+                title={title}
+                img={img}
+                id={id}
+                navigation={navigation}
+              />
+            )
           })}
         </ScrollView>
 

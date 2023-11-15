@@ -7,12 +7,17 @@ import { Remedy } from '../constants/modal'
 import { remedies } from '../constants/data'
 import { sizes } from '../constants/theme'
 
-type Props = {
+type RemedyProps = {
   item: Remedy
   index: any
+  // navigation: any
 }
 
-const RemedyScreen = () => {
+type Props = {
+  navigation: any
+}
+
+const RemedyScreen = ({ navigation }: Props) => {
   const [selectedRemedies, setSelectedRemedies] = useState<boolean[]>([])
 
   const selectRemedy = (index: string | number) => {
@@ -22,7 +27,7 @@ const RemedyScreen = () => {
     }))
   }
 
-  const renderItem = ({ item, index }: Props) => {
+  const renderItem = ({ item, index }: RemedyProps) => {
     const isSelected = selectedRemedies[index]
     const infoPreview = `${item.info.substring(0, 200)}...`
 
@@ -84,6 +89,9 @@ const RemedyScreen = () => {
               <TouchableOpacity
                 onPress={() => {
                   // To Detail Screen
+                  navigation.navigate('Detail', {
+                    item: item
+                  })
                 }}
               >
                 <Text style={styles.moreText}>
