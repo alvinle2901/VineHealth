@@ -70,7 +70,7 @@ const HomeScreen = ({ navigation }: Props) => {
 
           {/* Edit Button */}
           <TouchableOpacity onPress={() => navigation.navigate('Symptoms')}>
-            <Text style={[styles.editText, { marginTop: 35 }]}> Edit </Text>
+            <Text style={[styles.editText, { marginTop: 35 }]}>Edit {'>'}</Text>
           </TouchableOpacity>
         </View>
         {/* Current */}
@@ -91,6 +91,12 @@ const HomeScreen = ({ navigation }: Props) => {
         {feedback.map(({ name, comment }, index) => {
           return <FeedbackCard name={name} comment={comment} />
         })}
+        {/* More button */}
+        <TouchableOpacity>
+          <Text style={[styles.editText, { alignSelf: 'center' }]}>
+            More {'>'}
+          </Text>
+        </TouchableOpacity>
       </View>
       {/* Header */}
     </ScrollView>

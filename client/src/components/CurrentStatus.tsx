@@ -40,10 +40,9 @@ export default CurrentStatus
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.white, // Assuming colors.white is the color of the card
-    marginBottom: 20,
-    marginTop: 20,
-    borderRadius: 20,
-    padding: 30, // Add padding to create space within the card
+    marginVertical: 20,
+    borderRadius: 25,
+    padding: 15, // Add padding to create space within the card
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
