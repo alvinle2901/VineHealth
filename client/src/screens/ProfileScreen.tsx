@@ -24,6 +24,7 @@ type Props = {
 const ProfileScreen = ({ navigation }: Props) => {
   const [user, setUser] = useState('')
   const [email, setEmail] = useState('')
+  const [img, setImg] = useState('')
   const [form, setForm] = useState({
     language: 'English',
     darkMode: true
@@ -35,6 +36,7 @@ const ProfileScreen = ({ navigation }: Props) => {
       const value = jsonValue != null ? JSON.parse(jsonValue) : {}
       setUser(value.displayName)
       setEmail(value.email)
+      setImg(value.photoURL)
       return
     } catch (e) {
       // error reading value
@@ -54,7 +56,7 @@ const ProfileScreen = ({ navigation }: Props) => {
           <Image
             alt=""
             source={{
-              uri: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2.5&w=256&h=256&q=80'
+              uri: img
             }}
             style={styles.profileAvatar}
           />
@@ -194,8 +196,8 @@ const styles = StyleSheet.create({
     borderColor: '#e3e3e3'
   },
   profileAvatar: {
-    width: 60,
-    height: 60,
+    width: 80,
+    height: 80,
     borderRadius: 9999
   },
   profileName: {
