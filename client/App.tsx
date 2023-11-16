@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useFonts } from 'expo-font'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { NavigationContainer } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -10,13 +10,15 @@ import Main from './navigations/Main'
 import Auth from './navigations/Auth'
 
 function App() {
-  const [isLogin, setIsLogin] = React.useState(false)
+  const [isLogin, setIsLogin] = useState(false)
+
   const [fontsLoaded] = useFonts({
     HelveticaNeue: require('./assets/fonts/HelveticaNeue.otf'),
     SFProText: require('./assets/fonts/SF-Pro-Text-Regular.otf')
   })
 
-  const getData = async () => {
+  // get user data
+  const getUserData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('my-key')
       if (jsonValue) {
@@ -28,10 +30,11 @@ function App() {
     }
   }
 
-  React.useEffect(() => {
-    getData()
+  useEffect(() => {
+    getUserData()
   })
 
+  // load fonts
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync()

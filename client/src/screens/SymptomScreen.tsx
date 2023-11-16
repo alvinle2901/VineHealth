@@ -1,7 +1,14 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useState } from 'react'
-import { colors } from '../constants/colors'
 import { Dropdown } from 'react-native-element-dropdown'
+
+import { colors } from '../constants/colors'
+import {
+  dataAge,
+  dataFrequency,
+  dataGender,
+  dataSymptom
+} from '../constants/data'
 
 type Props = {
   navigation: any
@@ -13,30 +20,6 @@ const SymptomScreen = ({ navigation }: Props) => {
   const [selectedGender, setSelectedGender] = useState('')
   const [selectedAge, setSelectedAge] = useState('')
 
-  const dataSymptom = [
-    { label: 'Headache', value: 'headache' },
-    { label: 'Nausea', value: 'nausea' },
-    { label: 'Fatigue', value: 'fatigue' }
-    // ... other symptoms
-  ]
-
-  const dataFrequency = [
-    { label: 'every day', value: 'everyday' },
-    { label: '3 times a week', value: '3timeweek' }
-    // ... other frequency
-  ]
-
-  const dataGender = [
-    { label: 'Male', value: 'male' },
-    { label: 'Female', value: 'female' },
-    { label: 'Rather not say', value: 'nosay' }
-  ]
-
-  const dataAge = Array.from({ length: 100 }, (_, i) => ({
-    label: `${i + 1}`,
-    value: i + 1
-  }))
-
   const handleNavigate = () => {
     if (selectedSymptom === 'headache') {
       navigation.navigate('Remedy')
@@ -45,7 +28,7 @@ const SymptomScreen = ({ navigation }: Props) => {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.question}>How old are you?</Text>
       <Dropdown
         style={styles.dropdown}
@@ -54,7 +37,8 @@ const SymptomScreen = ({ navigation }: Props) => {
         valueField="value"
         value={selectedAge}
         onChange={(item) => {
-          setSelectedAge(item.value)
+          const age: number = item.value
+          setSelectedAge(age.toString())
         }}
       />
 
@@ -96,9 +80,9 @@ const SymptomScreen = ({ navigation }: Props) => {
       />
 
       <TouchableOpacity style={styles.submitButton} onPress={handleNavigate}>
-        <Text style={styles.submitText}>SUBMIT</Text>
+        <Text style={styles.submitText}>Submit</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -108,12 +92,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    marginTop: 25,
-    backgroundColor: colors.white,
-    justifyContent: 'flex-start' // Distributes space evenly
+    backgroundColor: colors.white
   },
   question: {
-    fontSize: 18, // Slightly reduced for better mobile readability
+    fontSize: 16, // Slightly reduced for better mobile readability
     fontWeight: '500', // Not too bold
     color: colors.heading, // Assuming you have a 'dark' color for text
     marginBottom: 10, // Reduced bottom margin
@@ -122,10 +104,10 @@ const styles = StyleSheet.create({
   dropdown: {
     backgroundColor: colors.whiteShadeBg,
     borderRadius: 10,
-    padding: 15,
+    padding: 10,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: colors.gray
+    borderColor: '#F9F9F9'
   },
   submitButton: {
     paddingVertical: 12,
@@ -142,7 +124,6 @@ const styles = StyleSheet.create({
   submitText: {
     color: colors.white,
     textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '600'
+    fontSize: 16
   }
 })

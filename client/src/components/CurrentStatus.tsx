@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   tagRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 10
+    marginBottom: 15
   },
   tag: {
     paddingVertical: 5,
