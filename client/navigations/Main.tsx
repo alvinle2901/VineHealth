@@ -6,20 +6,18 @@ import Symptoms from '../src/screens/SymptomScreen'
 import DetailScreen from '../src/screens/DetailScreen'
 import { TouchableOpacity, Image } from 'react-native'
 
-type Props = {
-  navigation: any
-}
+type Props = {}
 
 const Stack = createNativeStackNavigator()
 
-const Main = ({ navigation }: Props) => {
+const Main = (props: Props) => {
   return (
     <Stack.Navigator
       initialRouteName="Main"
       screenOptions={{
         headerShown: true,
         headerTitleAlign: 'center',
-        headerTitleStyle: { fontSize: 16, fontWeight: '300' },
+        headerTitleStyle: { fontSize: 16, fontWeight: '300' }
         // headerLeft: () => (
         //   <TouchableOpacity onPress={() => navigation.navigate('Symptoms')}>
         //     <Image

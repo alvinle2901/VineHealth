@@ -64,7 +64,7 @@ export default FeedbackCard
 
 const styles = StyleSheet.create({
   title: {
-    fontWeight: 'bold',
+    fontWeight: '500',
     fontSize: 15,
     textTransform: 'uppercase'
   },
@@ -122,6 +122,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 6,
-    elevation: 5
+    elevation: 5,
   }
 })

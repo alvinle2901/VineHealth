@@ -62,6 +62,7 @@ const RemedyScreen = ({ navigation }: Props) => {
             <View style={styles.contentContainer}>
               {/* Title */}
               <Text style={styles.title}>{item.title}</Text>
+              <View style={styles.line}></View>
 
               <View style={styles.infoSection}>
                 {/* Duration */}
@@ -149,11 +150,11 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 1
+      height: 2
     },
-    shadowOpacity: 0.22,
-    shadowRadius: 1,
-    elevation: 2,
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 5,
     marginLeft: 5,
     justifyContent: 'space-between',
     overflow: 'hidden'
@@ -165,7 +166,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     fontWeight: 'bold',
-    textAlign: 'center',
+    textAlign: 'center'
+  },
+  line: {
+    width: '50%',
+    height: 1,
+    backgroundColor: colors.primary,
+    alignSelf: 'center',
+    marginTop: 5,
     marginBottom: 14
   },
   infoSection: {

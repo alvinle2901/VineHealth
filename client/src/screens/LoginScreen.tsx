@@ -5,7 +5,6 @@ import { User, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { colors } from '../constants/colors'
-
 import FormInput from '../components/FormInput'
 
 type Props = { navigation: any }
@@ -32,7 +31,6 @@ const LoginScreen = ({ navigation }: Props) => {
         // Signed in
         const user = userCredential.user
         navigation.navigate('Main')
-        console.log(user)
         storeUser(user)
       })
       .catch((error) => {

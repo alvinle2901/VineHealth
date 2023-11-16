@@ -40,3 +40,27 @@ export const SECTIONS = [
     items: [{ id: 'logout', icon: 'log-out', label: 'Logout', type: 'link' }]
   }
 ]
+
+export const dataSymptom = [
+  { label: 'Headache', value: 'headache' },
+  { label: 'Nausea', value: 'nausea' },
+  { label: 'Fatigue', value: 'fatigue' }
+  // ... other symptoms
+]
+
+export const dataFrequency = [
+  { label: 'every day', value: 'everyday' },
+  { label: '3 times a week', value: '3timeweek' }
+  // ... other frequency
+]
+
+export const dataGender = [
+  { label: 'Male', value: 'male' },
+  { label: 'Female', value: 'female' },
+  { label: 'Rather not say', value: 'nosay' }
+]
+
+export const dataAge = Array.from({ length: 100 }, (_, i) => ({
+  label: `${i + 1}`,
+  value: i + 1
+}))

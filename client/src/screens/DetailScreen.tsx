@@ -10,8 +10,8 @@ import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { colors } from '../constants/colors'
-import FeedbackCard from '../components/FeedbackCard'
 import { timestampMillis } from '../utils/convertTime'
+import FeedbackCard from '../components/FeedbackCard'
 
 type Props = {
   route: any
@@ -21,13 +21,17 @@ type Props = {
 const DetailScreen = ({ route, navigation }: Props) => {
   const { item } = route.params
   const [feedback, setFeedback] = useState([])
+  const [expanded, setExpanded] = useState(false)
 
-  // get Feedback
+  // get Feedbacks
   const getFeedbacks = async () => {
+    let data = []
     try {
       const jsonValue = await AsyncStorage.getItem('feedback')
       const value = jsonValue != null ? JSON.parse(jsonValue) : []
-      setFeedback(value)
+      // filter data
+      data = value
+      setFeedback(data.filter((i: { title: any }) => i.title == item.title))
       return
     } catch (e) {
       // error reading value
@@ -44,7 +48,10 @@ const DetailScreen = ({ route, navigation }: Props) => {
       <Image source={item.img} style={styles.image} />
       <View style={styles.contentContainer}>
         {/* Title */}
-        <Text style={styles.title}>{item.title}</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>{item.title}</Text>
+          <View style={styles.line}></View>
+        </View>
 
         <View style={styles.infoSection}>
           {/* Duration */}
@@ -69,30 +76,83 @@ const DetailScreen = ({ route, navigation }: Props) => {
         <Text style={styles.description}>{item.info}</Text>
 
         {/* Feedbacks */}
-        {feedback.map(
-          ({ name, comment, symptom, photoURL, title, timeCreated }, index) => {
-            if (title == item.title) {
-              return (
-                <FeedbackCard
-                  name={name}
-                  comment={comment}
-                  symptom={symptom}
-                  photoURL={photoURL}
-                  title={title}
-                  timeCreated={timestampMillis(timeCreated)}
-                />
-              )
-            }
-          }
+        <Text style={[styles.description, { marginTop: 15 }]}>
+          1k+ people have done this remedy:
+        </Text>
+        {expanded ? (
+          <>
+            {feedback.map(
+              (
+                { name, comment, symptom, photoURL, title, timeCreated },
+                index
+              ) => {
+                return (
+                  <>
+                    <FeedbackCard
+                      name={name}
+                      comment={comment}
+                      symptom={symptom}
+                      photoURL={photoURL}
+                      title={title}
+                      timeCreated={timestampMillis(timeCreated)}
+                    />
+                    <View>
+                      <View style={styles.verticalLine}></View>
+                    </View>
+                  </>
+                )
+              }
+            )}
+          </>
+        ) : (
+          <>
+            {feedback
+              .slice(0, 3)
+              .map(
+                (
+                  { name, comment, symptom, photoURL, title, timeCreated },
+                  index
+                ) => {
+                  return (
+                    <>
+                      <FeedbackCard
+                        name={name}
+                        comment={comment}
+                        symptom={symptom}
+                        photoURL={photoURL}
+                        title={title}
+                        timeCreated={timestampMillis(timeCreated)}
+                      />
+                      <View>
+                        <View style={styles.verticalLine}></View>
+                      </View>
+                    </>
+                  )
+                }
+              )}
+          </>
         )}
 
         {/* More button */}
-        <TouchableOpacity onPress={() => {}}>
-          <Text style={styles.moreText}>
-            more {'>'}
-            {'>'}
-          </Text>
-        </TouchableOpacity>
+        {feedback.length > 3 && (
+          <TouchableOpacity
+            onPress={() => {
+              setExpanded(!expanded)
+            }}
+          >
+            {expanded ? (
+              <Text style={styles.moreText}>
+                Read less comment {'>'}
+                {'>'}
+              </Text>
+            ) : (
+              <Text style={styles.moreText}>
+                Read more comment {'>'}
+                {'>'}
+              </Text>
+            )}
+          </TouchableOpacity>
+        )}
 
         {/* Button */}
         <TouchableOpacity
@@ -121,13 +181,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    textAlign: 'center',
+    textAlign: 'center'
+  },
+  titleContainer: {
     marginBottom: 20
   },
   infoSection: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    alignContent: 'center',
     marginBottom: 20
   },
   infoContainer: {
@@ -135,7 +198,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   infoText: {
-    fontSize: 13,
+    fontSize: 14,
     marginLeft: 5
   },
   description: {
@@ -152,9 +215,10 @@ const styles = StyleSheet.create({
   moreText: {
     color: colors.primary,
     fontWeight: '300',
-    marginTop: 5,
-    alignSelf: 'center',
-    textDecorationLine: 'underline'
+    marginTop: 20,
+    textDecorationLine: 'underline',
+    marginLeft: 30,
+    fontSize: 12
   },
   actionButton: {
     paddingVertical: 6,
@@ -170,5 +234,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     fontWeight: '300'
+  },
+  line: {
+    width: '50%',
+    height: 1,
+    backgroundColor: colors.primary,
+    alignSelf: 'center',
+    marginTop: 5
+  },
+  verticalLine: {
+    width: 6,
+    height: 40,
+    backgroundColor: colors.primary,
+    marginVertical: -20,
+    marginLeft: 30
   }
 })

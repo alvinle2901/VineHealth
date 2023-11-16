@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
   streakContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 16
+    marginTop: 6,
+    marginBottom: 12
   },
   dayContainer: {
     alignItems: 'center'
