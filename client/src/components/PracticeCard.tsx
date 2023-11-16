@@ -71,6 +71,7 @@ const PracticeCard = ({
             <Image source={img} style={{ width: 300, height: 130 }} />
 
             <Text style={styles.cardTitle}>{title}</Text>
+            <View style={styles.line}></View>
             <Text style={styles.cardSubTitle}>
               Did you do this practice today?
             </Text>
@@ -235,5 +236,13 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 17,
     color: 'white'
+  },
+  line: {
+    width: '40%',
+    height: 1,
+    backgroundColor: colors.primary,
+    alignSelf: 'center',
+    marginTop: 5,
+    overflow: 'hidden'
   }
 })
