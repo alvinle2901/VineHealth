@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { app } from '../../firebase.config'
 import { User, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import HideWithKeyboard from 'react-native-hide-with-keyboard'
 
 import { colors } from '../constants/colors'
 import FormInput from '../components/FormInput'
@@ -68,12 +69,14 @@ const LoginScreen = ({ navigation }: Props) => {
       </View>
 
       {/* Footer */}
-      <View style={styles.footerContainer}>
-        <Text style={styles.footerText1}>DOESN'T HAVE AN ACCOUNT? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-          <Text style={styles.footerText2}>SIGN UP</Text>
-        </TouchableOpacity>
-      </View>
+      <HideWithKeyboard>
+        <View style={styles.footerContainer}>
+          <Text style={styles.footerText1}>DOESN'T HAVE AN ACCOUNT? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+            <Text style={styles.footerText2}>SIGN UP</Text>
+          </TouchableOpacity>
+        </View>
+      </HideWithKeyboard>
     </View>
   )
 }

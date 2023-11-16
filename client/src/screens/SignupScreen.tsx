@@ -7,6 +7,7 @@ import {
   User
 } from 'firebase/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import HideWithKeyboard from 'react-native-hide-with-keyboard'
 
 import { colors } from '../constants/colors'
 
@@ -86,7 +87,7 @@ const SignupScreen = ({ navigation }: Props) => {
           />
         </View>
         {/* Upload img */}
-        <ImageUpload setImg={setImgUrl}/>
+        <ImageUpload setImg={setImgUrl} />
 
         {/* Signup Button */}
         <TouchableOpacity style={styles.signupButton} onPress={submitHandler}>
@@ -95,12 +96,14 @@ const SignupScreen = ({ navigation }: Props) => {
       </View>
 
       {/* Footer */}
-      <View style={styles.footerContainer}>
-        <Text style={styles.footerText1}>ALREADY HAVE AN ACCOUNT? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.footerText2}>LOG IN</Text>
-        </TouchableOpacity>
-      </View>
+      <HideWithKeyboard>
+        <View style={styles.footerContainer}>
+          <Text style={styles.footerText1}>ALREADY HAVE AN ACCOUNT? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.footerText2}>LOG IN</Text>
+          </TouchableOpacity>
+        </View>
+      </HideWithKeyboard>
     </View>
   )
 }

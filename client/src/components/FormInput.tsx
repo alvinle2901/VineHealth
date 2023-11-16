@@ -17,6 +17,7 @@ const FormInput = ({ placeHolder, value, setValue }: FormInputProps) => {
           style={styles.input}
           placeholder={placeHolder}
           onChangeText={(e) => setValue(e)}
+          secureTextEntry={placeHolder === 'Password' ? true : false}
         />
       </View>
     </View>
