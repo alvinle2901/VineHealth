@@ -24,20 +24,20 @@ export const SECTIONS = [
   {
     header: 'Preferences',
     items: [
-      { id: 'language', icon: 'globe', label: 'Language', type: 'select' },
-      { id: 'darkMode', icon: 'moon', label: 'Dark Mode', type: 'toggle' }
+      { id: 'language', icon: require('../../assets/icons/language.png'), label: 'Language', type: 'select' },
+      { id: 'darkMode', icon: require('../../assets/icons/moon.png'), label: 'Dark Mode', type: 'toggle' }
     ]
   },
   {
     header: 'Help',
     items: [
-      { id: 'bug', icon: 'flag', label: 'Report Bug', type: 'link' },
-      { id: 'contact', icon: 'mail', label: 'Contact Us', type: 'link' }
+      { id: 'bug', icon: require('../../assets/icons/flag.png'), label: 'Report Bug', type: 'link' },
+      { id: 'contact', icon: require('../../assets/icons/mail.png'), label: 'Contact Us', type: 'link' }
     ]
   },
   {
     header: 'Account',
-    items: [{ id: 'logout', icon: 'log-out', label: 'Logout', type: 'link' }]
+    items: [{ id: 'logout', icon: require('../../assets/icons/logout.png'), label: 'Logout', type: 'link' }]
   }
 ]
 

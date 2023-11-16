@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   Switch
 } from 'react-native'
-import FeatherIcon from 'react-native-vector-icons/Feather'
 import { getAuth, signOut } from 'firebase/auth'
 import { app } from '../../firebase.config'
 
@@ -54,17 +53,14 @@ const ProfileScreen = ({ navigation }: Props) => {
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.profile}>
           <Image
-            alt=""
             source={{
               uri: img
             }}
             style={styles.profileAvatar}
           />
-
           <Text style={styles.profileName}>{user}</Text>
-
           <Text style={styles.profileEmail}>{email}</Text>
-
+          {/* Edit */}
           <TouchableOpacity
             onPress={() => {
               // handle onPress
@@ -72,8 +68,10 @@ const ProfileScreen = ({ navigation }: Props) => {
           >
             <View style={styles.profileAction}>
               <Text style={styles.profileActionText}>Edit Profile</Text>
-
-              <FeatherIcon color="#fff" name="edit" size={16} />
+              <Image
+                source={require('../../assets/icons/edit.png')}
+                style={[styles.rowIcon, { tintColor: 'white', marginRight: 0 }]}
+              />
             </View>
           </TouchableOpacity>
         </View>
@@ -99,7 +97,7 @@ const ProfileScreen = ({ navigation }: Props) => {
                           signOut(auth)
                             .then(async () => {
                               await AsyncStorage.removeItem('my-key')
-                              navigation.navigate('Main', { screen: 'Login' })
+                              navigation.navigate('Login')
                             })
                             .catch((error) => {
                               console.log(error)
@@ -108,12 +106,17 @@ const ProfileScreen = ({ navigation }: Props) => {
                       }}
                     >
                       <View style={styles.row}>
-                        <FeatherIcon
-                          color="#616161"
-                          name={icon}
-                          style={styles.rowIcon}
-                          size={22}
-                        />
+                        {id == 'logout' ? (
+                          <Image
+                            source={icon}
+                            style={[
+                              styles.rowIcon,
+                              { width: 30, height: 30, marginLeft: -5 }
+                            ]}
+                          />
+                        ) : (
+                          <Image source={icon} style={styles.rowIcon} />
+                        )}
                         <Text style={styles.rowLabel}>{label}</Text>
                         <View style={styles.rowSpacer} />
                         {type === 'select' && (
@@ -128,10 +131,9 @@ const ProfileScreen = ({ navigation }: Props) => {
                         )}
 
                         {(type === 'select' || type === 'link') && (
-                          <FeatherIcon
-                            color="#ababab"
-                            name="chevron-right"
-                            size={22}
+                          <Image
+                            source={require('../../assets/icons/next.png')}
+                            style={[styles.rowIcon, { width: 25, height: 25 }]}
                           />
                         )}
                       </View>
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
   },
   profileAction: {
     marginTop: 12,
-    paddingVertical: 10,
+    paddingVertical: 8,
     paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
@@ -225,7 +227,7 @@ const styles = StyleSheet.create({
   profileActionText: {
     marginRight: 8,
     fontSize: 15,
-    fontWeight: '400',
+    fontWeight: '300',
     color: '#fff'
   },
   row: {
@@ -242,7 +244,9 @@ const styles = StyleSheet.create({
     borderColor: '#e3e3e3'
   },
   rowIcon: {
-    marginRight: 12
+    marginRight: 12,
+    width: 20,
+    height: 20
   },
   rowLabel: {
     fontSize: 15,

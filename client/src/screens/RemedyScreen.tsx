@@ -132,6 +132,8 @@ const RemedyScreen = ({ navigation }: Props) => {
       containerCustomStyle={styles.carouselContainer}
       inactiveSlideScale={0.75}
       inactiveSlideOpacity={0.88}
+      inactiveSlideShift={0}
+      useScrollView={true}
     />
   )
 }
