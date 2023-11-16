@@ -36,11 +36,9 @@ const SignupScreen = ({ navigation }: Props) => {
         })
           .then(() => {
             // Profile updated!
-            // ...
           })
           .catch((error) => {
             // An error occurred
-            // ...
           })
 
         Toast.show('Sign up successfully!', {
@@ -67,13 +65,19 @@ const SignupScreen = ({ navigation }: Props) => {
 
         {/* TextInput */}
         <View style={styles.inputItem}>
-          <FormInput placeHolder={'Name'} value={name} setValue={setName} />
+          <FormInput
+            placeHolder={'Name'}
+            value={name}
+            setValue={setName}
+            editable={true}
+          />
         </View>
         <View style={styles.inputItem}>
           <FormInput
             placeHolder={'Email Address'}
             value={email}
             setValue={setEmail}
+            editable={true}
           />
         </View>
         <View style={styles.inputItem}>
@@ -81,6 +85,7 @@ const SignupScreen = ({ navigation }: Props) => {
             placeHolder={'Password'}
             value={password}
             setValue={setPassword}
+            editable={true}
           />
         </View>
         {/* Upload img */}

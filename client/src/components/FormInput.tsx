@@ -5,10 +5,11 @@ import { colors } from '../constants/colors'
 type FormInputProps = {
   placeHolder: string
   value: string
+  editable: boolean
   setValue: Dispatch<SetStateAction<string>>
 }
 
-const FormInput = ({ placeHolder, value, setValue }: FormInputProps) => {
+const FormInput = ({ placeHolder, value, setValue, editable }: FormInputProps) => {
   return (
     <View>
       <View style={styles.container}>
@@ -18,6 +19,7 @@ const FormInput = ({ placeHolder, value, setValue }: FormInputProps) => {
           placeholder={placeHolder}
           onChangeText={(e) => setValue(e)}
           secureTextEntry={placeHolder === 'Password' ? true : false}
+          editable={editable}
         />
       </View>
     </View>

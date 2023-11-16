@@ -70,7 +70,7 @@ const ProfileScreen = ({ navigation }: Props) => {
           {/* Edit */}
           <TouchableOpacity
             onPress={() => {
-              // handle onPress
+              navigation.navigate('Edit Profile', {user: data})
             }}
           >
             <View style={styles.profileAction}>
