@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { RadioButton } from 'react-native-paper'
-import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../../firebase.config'
 
 import { colors } from '../constants/colors'
@@ -23,9 +23,17 @@ type Props = {
   title: string
   id: number
   navigation: any
+  photoURL: string
 }
 
-const PracticeCard = ({ user, title, img, id, navigation }: Props) => {
+const PracticeCard = ({
+  user,
+  title,
+  img,
+  id,
+  navigation,
+  photoURL
+}: Props) => {
   const [visible, setVisible] = useState(true)
   const [uploaded, setUploaded] = useState(false)
   const [checked, setChecked] = useState('')
@@ -35,7 +43,11 @@ const PracticeCard = ({ user, title, img, id, navigation }: Props) => {
   const uploadData = async () => {
     const docRef = await addDoc(collection(db, 'Feedback'), {
       name: user,
-      comment: feeling
+      comment: feeling,
+      photoURL: photoURL,
+      title: title,
+      symptom: 'headache',
+      timeCreated: serverTimestamp()
     })
   }
 
@@ -105,7 +117,7 @@ const PracticeCard = ({ user, title, img, id, navigation }: Props) => {
                 <Text style={[styles.cardText, { alignSelf: 'center' }]}>
                   Thank you
                 </Text>
-                <Text style={styles.cardText}>
+                <Text style={[styles.cardText, { alignSelf: 'center' }]}>
                   Your session has been saved!
                 </Text>
               </View>

@@ -25,6 +25,7 @@ const LoginScreen = ({ navigation }: Props) => {
 
   const auth = getAuth(app)
 
+  // Sign in handler
   const submitHandler = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -67,13 +68,13 @@ const LoginScreen = ({ navigation }: Props) => {
         </TouchableOpacity>
         <Text style={styles.forgotPassword}>Forgot password?</Text>
       </View>
+
+      {/* Footer */}
       <View style={styles.footerContainer}>
-        <Text style={styles.footerText}>
-          <Text style={styles.footerText1}>DOESN'T HAVE AN ACCOUNT? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-            <Text style={styles.footerText2}>SIGN UP</Text>
-          </TouchableOpacity>
-        </Text>
+        <Text style={styles.footerText1}>DOESN'T HAVE AN ACCOUNT? </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+          <Text style={styles.footerText2}>SIGN UP</Text>
+        </TouchableOpacity>
       </View>
     </View>
   )
@@ -116,21 +117,21 @@ export const styles = StyleSheet.create({
     marginTop: 15,
     color: colors.primary
   },
-  footerText: {
-    fontWeight: '400',
-    fontSize: 14
-  },
   footerText1: {
-    color: colors.gray
+    color: colors.gray,
+    fontSize: 14,
+    fontWeight: '400'
   },
   footerText2: {
-    color: colors.primary
+    color: colors.primary,
+    fontSize: 14,
+    fontWeight: '400'
   },
   footerContainer: {
     position: 'absolute',
     bottom: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 })

@@ -6,9 +6,12 @@ import {
   TouchableOpacity,
   ScrollView
 } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { colors } from '../constants/colors'
+import FeedbackCard from '../components/FeedbackCard'
+import { timestampMillis } from '../utils/convertTime'
 
 type Props = {
   route: any
@@ -17,9 +20,26 @@ type Props = {
 
 const DetailScreen = ({ route, navigation }: Props) => {
   const { item } = route.params
+  const [feedback, setFeedback] = useState([])
+
+  // get Feedback
+  const getFeedbacks = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('feedback')
+      const value = jsonValue != null ? JSON.parse(jsonValue) : []
+      setFeedback(value)
+      return
+    } catch (e) {
+      // error reading value
+    }
+  }
+
+  useEffect(() => {
+    getFeedbacks()
+  }, [])
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Image */}
       <Image source={item.img} style={styles.image} />
       <View style={styles.contentContainer}>
@@ -49,7 +69,22 @@ const DetailScreen = ({ route, navigation }: Props) => {
         <Text style={styles.description}>{item.info}</Text>
 
         {/* Feedbacks */}
-
+        {feedback.map(
+          ({ name, comment, symptom, photoURL, title, timeCreated }, index) => {
+            if (title == item.title) {
+              return (
+                <FeedbackCard
+                  name={name}
+                  comment={comment}
+                  symptom={symptom}
+                  photoURL={photoURL}
+                  title={title}
+                  timeCreated={timestampMillis(timeCreated)}
+                />
+              )
+            }
+          }
+        )}
 
         {/* More button */}
         <TouchableOpacity onPress={() => {}}>
@@ -76,12 +111,15 @@ const DetailScreen = ({ route, navigation }: Props) => {
 export default DetailScreen
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white'
+  },
   contentContainer: {
     paddingVertical: 5,
     paddingHorizontal: 25
   },
   title: {
-    fontSize: 17,
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20
@@ -97,11 +135,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   infoText: {
-    fontSize: 12,
+    fontSize: 13,
     marginLeft: 5
   },
   description: {
-    fontSize: 14,
+    fontSize: 15,
     color: '#333',
     textAlign: 'justify',
     lineHeight: 21
