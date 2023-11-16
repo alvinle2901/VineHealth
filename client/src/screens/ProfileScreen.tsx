@@ -21,6 +21,8 @@ type Props = {
 }
 
 const ProfileScreen = ({ navigation }: Props) => {
+  const auth = getAuth(app)
+
   const [user, setUser] = useState('')
   const [email, setEmail] = useState('')
   const [img, setImg] = useState('')
@@ -41,8 +43,6 @@ const ProfileScreen = ({ navigation }: Props) => {
       // error reading value
     }
   }
-
-  const auth = getAuth(app)
 
   React.useEffect(() => {
     getUserData()
@@ -119,6 +119,7 @@ const ProfileScreen = ({ navigation }: Props) => {
                         )}
                         <Text style={styles.rowLabel}>{label}</Text>
                         <View style={styles.rowSpacer} />
+
                         {type === 'select' && (
                           <Text style={styles.rowValue}></Text>
                         )}
@@ -133,7 +134,7 @@ const ProfileScreen = ({ navigation }: Props) => {
                         {(type === 'select' || type === 'link') && (
                           <Image
                             source={require('../../assets/icons/next.png')}
-                            style={[styles.rowIcon, { width: 25, height: 25 }]}
+                            style={[styles.rowRightIcon, { width: 25, height: 25 }]}
                           />
                         )}
                       </View>
@@ -245,6 +246,11 @@ const styles = StyleSheet.create({
   },
   rowIcon: {
     marginRight: 12,
+    width: 20,
+    height: 20
+  },
+  rowRightIcon: {
+    marginRight: 5,
     width: 20,
     height: 20
   },

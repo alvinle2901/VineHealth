@@ -3,27 +3,18 @@ import React, { useState } from 'react'
 import {
   getAuth,
   createUserWithEmailAndPassword,
-  updateProfile,
-  User
+  updateProfile
 } from 'firebase/auth'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import HideWithKeyboard from 'react-native-hide-with-keyboard'
+import Toast from 'react-native-root-toast'
 
 import { colors } from '../constants/colors'
+import { storeUser } from '../utils/storage'
 
 import FormInput from '../components/FormInput'
 import ImageUpload from '../components/ImageUpload'
 
 type Props = { navigation: any }
-
-const storeUser = async (value: string | User) => {
-  try {
-    const jsonValue = JSON.stringify(value)
-    await AsyncStorage.setItem('my-key', jsonValue)
-  } catch (e) {
-    // saving error
-  }
-}
 
 const SignupScreen = ({ navigation }: Props) => {
   const [name, setName] = useState('')
@@ -37,8 +28,8 @@ const SignupScreen = ({ navigation }: Props) => {
   const submitHandler = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed up
         const user = userCredential.user
+        // update user profile
         updateProfile(user, {
           displayName: name,
           photoURL: imgUrl
@@ -51,7 +42,13 @@ const SignupScreen = ({ navigation }: Props) => {
             // An error occurred
             // ...
           })
-        navigation.navigate('Main')
+
+        Toast.show('Sign up successfully!', {
+          duration: Toast.durations.SHORT,
+          backgroundColor: 'white',
+          textColor: 'black'
+        })
+        navigation.navigate('Main', { screen: 'Home' })
         storeUser(user)
       })
       .catch((error) => {

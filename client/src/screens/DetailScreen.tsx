@@ -31,7 +31,7 @@ const DetailScreen = ({ route, navigation }: Props) => {
       const value = jsonValue != null ? JSON.parse(jsonValue) : []
       // filter data
       data = value
-      setFeedback(data.filter((i: { title: any }) => i.title == item.title))
+      setFeedback(data.filter((feedback: { title: any }) => feedback.title == item.title))
       return
     } catch (e) {
       // error reading value

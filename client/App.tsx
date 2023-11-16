@@ -2,6 +2,7 @@ import * as React from 'react'
 import { useFonts } from 'expo-font'
 import { useCallback, useEffect, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { RootSiblingParent } from 'react-native-root-siblings'
 import { NavigationContainer } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as SplashScreen from 'expo-splash-screen'
@@ -47,15 +48,17 @@ function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      {isLogin ? (
-        <NavigationContainer>
-          <Main />
-        </NavigationContainer>
-      ) : (
-        <NavigationContainer>
-          <Auth />
-        </NavigationContainer>
-      )}
+      <RootSiblingParent>
+        {isLogin ? (
+          <NavigationContainer>
+            <Main />
+          </NavigationContainer>
+        ) : (
+          <NavigationContainer>
+            <Auth />
+          </NavigationContainer>
+        )}
+      </RootSiblingParent>
     </GestureHandlerRootView>
   )
 }

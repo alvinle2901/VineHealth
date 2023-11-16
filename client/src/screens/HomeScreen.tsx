@@ -6,19 +6,14 @@ import {
   StyleSheet
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import {
-  collection,
-  query,
-  onSnapshot,
-  orderBy,
-  DocumentData
-} from 'firebase/firestore'
 import { db } from '../../firebase.config'
+import { collection, query, onSnapshot, orderBy } from 'firebase/firestore'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Feedback } from '../constants/modal'
 import { colors } from '../constants/colors'
 import { remedies } from '../constants/data'
+import { storeFeedback } from '../utils/storage'
 import { timestampMillis } from '../utils/convertTime'
 
 import FeedbackCard from '../components/FeedbackCard'
@@ -43,13 +38,13 @@ const HomeScreen = ({ navigation }: Props) => {
   const fetchFeedbackData = async () => {
     const q = query(collection(db, 'Feedback'), orderBy('timeCreated', 'desc'))
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const recipes: Feedback[] = []
-      const myPosts = querySnapshot.docs.map(collectIdsAndDocs)
-      storeFeedback(myPosts)
+      const feedbacks: Feedback[] = []
+      const data = querySnapshot.docs.map(collectIdsAndDocs)
+      storeFeedback(data)
 
       querySnapshot.forEach((doc) => {
         const recipe = doc.data()
-        recipes.push({
+        feedbacks.push({
           name: recipe.name,
           comment: recipe.comment,
           symptom: recipe.symptom,
@@ -58,7 +53,7 @@ const HomeScreen = ({ navigation }: Props) => {
           timeCreated: timestampMillis(recipe.timeCreated)
         })
       })
-      setFeedback(recipes)
+      setFeedback(feedbacks)
     })
   }
 
@@ -72,16 +67,6 @@ const HomeScreen = ({ navigation }: Props) => {
       return
     } catch (e) {
       // error reading value
-    }
-  }
-
-  // Store Feedbacks
-  const storeFeedback = async (value: DocumentData) => {
-    try {
-      const jsonValue = JSON.stringify(value)
-      await AsyncStorage.setItem('feedback', jsonValue)
-    } catch (e) {
-      // saving error
     }
   }
 

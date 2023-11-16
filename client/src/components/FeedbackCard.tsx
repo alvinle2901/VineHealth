@@ -16,6 +16,7 @@ const FeedbackCard = ({
   timeCreated
 }: Props) => {
   const date = new Date(timeCreated)
+  
   return (
     <View style={styles.card}>
       <View style={{ marginRight: 15 }}>
