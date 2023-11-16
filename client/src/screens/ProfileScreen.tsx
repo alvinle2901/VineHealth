@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   StyleSheet,
   SafeAreaView,
@@ -23,9 +23,7 @@ type Props = {
 const ProfileScreen = ({ navigation }: Props) => {
   const auth = getAuth(app)
 
-  const [user, setUser] = useState('')
-  const [email, setEmail] = useState('')
-  const [img, setImg] = useState('')
+  const [data, setData] = useState<any>({})
   const [form, setForm] = useState({
     language: 'English',
     darkMode: true
@@ -35,18 +33,27 @@ const ProfileScreen = ({ navigation }: Props) => {
     try {
       const jsonValue = await AsyncStorage.getItem('my-key')
       const value = jsonValue != null ? JSON.parse(jsonValue) : {}
-      setUser(value.displayName)
-      setEmail(value.email)
-      setImg(value.photoURL)
+      setData(value)
       return
     } catch (e) {
       // error reading value
     }
   }
 
-  React.useEffect(() => {
+  const handleLogout = () => {
+    signOut(auth)
+      .then(async () => {
+        await AsyncStorage.removeItem('my-key')
+        navigation.navigate('Login')
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  useEffect(() => {
     getUserData()
-  })
+  }, [])
 
   return (
     <SafeAreaView style={{ backgroundColor: '#f6f6f6' }}>
@@ -54,12 +61,12 @@ const ProfileScreen = ({ navigation }: Props) => {
         <View style={styles.profile}>
           <Image
             source={{
-              uri: img
+              uri: data.photoURL
             }}
             style={styles.profileAvatar}
           />
-          <Text style={styles.profileName}>{user}</Text>
-          <Text style={styles.profileEmail}>{email}</Text>
+          <Text style={styles.profileName}>{data.displayName}</Text>
+          <Text style={styles.profileEmail}>{data.email}</Text>
           {/* Edit */}
           <TouchableOpacity
             onPress={() => {
@@ -94,14 +101,7 @@ const ProfileScreen = ({ navigation }: Props) => {
                     <TouchableOpacity
                       onPress={() => {
                         if (id == 'logout') {
-                          signOut(auth)
-                            .then(async () => {
-                              await AsyncStorage.removeItem('my-key')
-                              navigation.navigate('Login')
-                            })
-                            .catch((error) => {
-                              console.log(error)
-                            })
+                          handleLogout()
                         }
                       }}
                     >
@@ -134,7 +134,10 @@ const ProfileScreen = ({ navigation }: Props) => {
                         {(type === 'select' || type === 'link') && (
                           <Image
                             source={require('../../assets/icons/next.png')}
-                            style={[styles.rowRightIcon, { width: 25, height: 25 }]}
+                            style={[
+                              styles.rowRightIcon,
+                              { width: 25, height: 25 }
+                            ]}
                           />
                         )}
                       </View>
