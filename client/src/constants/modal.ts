@@ -8,10 +8,8 @@ export type Remedy = {
 }
 
 export type Feedback = {
-  name: string
   comment: string
   symptom: string
-  photoURL: string
   title: string
   timeCreated: number
 }

@@ -1,14 +1,20 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView
+} from 'react-native'
 import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 
 import { storage } from '../../firebase.config'
+import { getAuth, updateProfile } from 'firebase/auth'
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
 
 import { colors } from '../constants/colors'
 import FormInput from '../components/FormInput'
-import { ScrollView } from 'react-native-gesture-handler'
-import { getAuth, updateProfile } from 'firebase/auth'
 
 type Props = {
   route: any
@@ -17,6 +23,7 @@ type Props = {
 const EditProfileScreen = ({ route }: Props) => {
   const { user } = route.params
   const auth = getAuth()
+  const currentUser = auth.currentUser
 
   const [image, setImage] = useState(user.photoURL)
   const [name, setName] = useState(user.displayName)
@@ -61,21 +68,23 @@ const EditProfileScreen = ({ route }: Props) => {
     if (!result.canceled) {
       await uploadImage(result.assets[0].uri)
     }
+    2
   }
 
   // update data
   const submitHandler = () => {
-    
-    // updateProfile(, {
-    //   displayName: name,
-    //   photoURL: image
-    // })
-    //   .then(() => {
-    //     // Profile updated!
-    //   })
-    //   .catch((error) => {
-    //     // An error occurred
-    //   })
+    if (currentUser) {
+      updateProfile(currentUser, {
+        displayName: name,
+        photoURL: image
+      })
+        .then(() => {
+          console.log('Profile updated')
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
   }
 
   return (
@@ -134,7 +143,6 @@ export default EditProfileScreen
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: 'white',
     padding: 25
   },

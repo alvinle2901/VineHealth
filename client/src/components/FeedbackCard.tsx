@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
+import { getAuth } from 'firebase/auth'
 
 import { colors } from '../constants/colors'
 import { Feedback } from '../constants/modal'
@@ -7,21 +8,17 @@ import { formatTimeAgo } from '../utils/convertTime'
 
 type Props = Feedback
 
-const FeedbackCard = ({
-  name,
-  comment,
-  symptom,
-  photoURL,
-  title,
-  timeCreated
-}: Props) => {
+const FeedbackCard = ({ comment, symptom, title, timeCreated }: Props) => {
   const date = new Date(timeCreated)
-  
+  const auth = getAuth()
+  const user = auth.currentUser
+  const uri: any = user?.photoURL
+
   return (
     <View style={styles.card}>
       <View style={{ marginRight: 15 }}>
         {/* Image */}
-        <Image style={styles.avatar} source={{ uri: photoURL }} />
+        <Image style={styles.avatar} source={{ uri: uri }} />
 
         {/* Time */}
         <Text style={styles.time}>{formatTimeAgo(date)}</Text>
@@ -34,11 +31,12 @@ const FeedbackCard = ({
           {/* Symptom */}
           <Text style={[styles.statusTag]}>{symptom}</Text>
         </View>
+        <View style={styles.line}></View>
 
         {/* Name */}
-        <View style={{ flexDirection: 'row', marginTop: 8 }}>
+        <View style={{ flexDirection: 'row', marginTop: 5 }}>
           <Text style={styles.header}>Name: </Text>
-          <Text style={styles.content}>{name}</Text>
+          <Text style={styles.content}>{user?.displayName}</Text>
         </View>
 
         {/* Comment */}
@@ -49,7 +47,9 @@ const FeedbackCard = ({
               styles.content,
               {
                 fontStyle: 'italic',
-                textAlign: 'justify'
+                textAlign: 'justify',
+                overflow: 'hidden',
+                flex: 1
               }
             ]}
           >
@@ -66,7 +66,7 @@ export default FeedbackCard
 const styles = StyleSheet.create({
   title: {
     fontWeight: '500',
-    fontSize: 15,
+    fontSize: 14,
     textTransform: 'uppercase'
   },
   titleContainer: {
@@ -123,6 +123,12 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 6,
-    elevation: 5,
+    elevation: 5
+  },
+  line: {
+    width: '50%',
+    height: 1,
+    backgroundColor: colors.primary,
+    overflow: 'hidden'
   }
 })

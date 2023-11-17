@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { useFonts } from 'expo-font'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { RootSiblingParent } from 'react-native-root-siblings'
 import { NavigationContainer } from '@react-navigation/native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import * as SplashScreen from 'expo-splash-screen'
 
 import Main from './navigations/Main'
@@ -12,27 +12,21 @@ import Auth from './navigations/Auth'
 
 function App() {
   const [isLogin, setIsLogin] = useState(false)
+  const auth = getAuth()
 
   const [fontsLoaded] = useFonts({
     HelveticaNeue: require('./assets/fonts/HelveticaNeue.otf'),
     SFProText: require('./assets/fonts/SF-Pro-Text-Regular.otf')
   })
 
-  // get user data
-  const getUserData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('my-key')
-      if (jsonValue) {
-        setIsLogin(true)
-      }
-      return jsonValue != null ? JSON.parse(jsonValue) : null
-    } catch (e) {
-      // error reading value
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+      setIsLogin(true)
+    } else {
+      console.log('User is signed out')
     }
-  }
-
-  useEffect(() => {
-    getUserData()
   })
 
   // load fonts
