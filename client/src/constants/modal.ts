@@ -13,3 +13,7 @@ export type Feedback = {
   title: string
   timeCreated: number
 }
+
+export type UserData = {
+  phoneNumber: string
+}

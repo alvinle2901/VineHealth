@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     width: '50%',
     height: 1,
     backgroundColor: colors.primary,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    marginTop :2
   }
 })

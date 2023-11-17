@@ -9,18 +9,21 @@ import {
 import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 
-import { storage } from '../../firebase.config'
+import { db, storage } from '../../firebase.config'
+import { doc, setDoc } from 'firebase/firestore'
 import { getAuth, updateProfile } from 'firebase/auth'
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
 
 import { colors } from '../constants/colors'
 import FormInput from '../components/FormInput'
+import Toast from 'react-native-root-toast'
 
 type Props = {
   route: any
+  navigation: any
 }
 
-const EditProfileScreen = ({ route }: Props) => {
+const EditProfileScreen = ({ route, navigation }: Props) => {
   const { user } = route.params
   const auth = getAuth()
   const currentUser = auth.currentUser
@@ -78,8 +81,17 @@ const EditProfileScreen = ({ route }: Props) => {
         displayName: name,
         photoURL: image
       })
-        .then(() => {
-          console.log('Profile updated')
+        .then(async () => {
+          await setDoc(doc(db, 'users', currentUser.uid), {
+            phoneNumber: phoneNum
+          }).then(() => {
+            navigation.navigate('Profile')
+            Toast.show('Update successfully!', {
+              duration: Toast.durations.SHORT,
+              backgroundColor: 'white',
+              textColor: 'black'
+            })
+          })
         })
         .catch((error) => {
           console.log(error)
