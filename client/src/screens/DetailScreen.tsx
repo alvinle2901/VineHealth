@@ -30,7 +30,9 @@ const DetailScreen = ({ route }: Props) => {
       // filter data
       const data: Feedback[] = value
       setFeedback(
-        data.filter((feedback: { title: string }) => feedback.title == item.title)
+        data.filter(
+          (feedback: { title: string }) => feedback.title == item.title
+        )
       )
       return
     } catch (e) {
@@ -85,6 +87,7 @@ const DetailScreen = ({ route }: Props) => {
               return (
                 <>
                   <FeedbackCard
+                    key={index}
                     comment={comment}
                     symptom={symptom}
                     title={title}
@@ -105,6 +108,7 @@ const DetailScreen = ({ route }: Props) => {
                 return (
                   <>
                     <FeedbackCard
+                      key={index}
                       comment={comment}
                       symptom={symptom}
                       title={title}

@@ -75,6 +75,7 @@ const HomeScreen = ({ navigation }: Props) => {
           {remedies.map(({ title, img, id }, index) => {
             return (
               <PracticeCard
+                key={index}
                 title={title}
                 img={img}
                 id={id}
@@ -93,6 +94,7 @@ const HomeScreen = ({ navigation }: Props) => {
             {feedback.map(({ comment, symptom, title, timeCreated }, index) => {
               return (
                 <FeedbackCard
+                  key={index}
                   comment={comment}
                   symptom={symptom}
                   title={title}
@@ -108,6 +110,7 @@ const HomeScreen = ({ navigation }: Props) => {
               .map(({ comment, symptom, title, timeCreated }, index) => {
                 return (
                   <FeedbackCard
+                    key={index}
                     comment={comment}
                     symptom={symptom}
                     title={title}
