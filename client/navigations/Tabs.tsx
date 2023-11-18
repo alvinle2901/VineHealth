@@ -1,13 +1,14 @@
 import React from 'react'
 import { Animated, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+
 import { colors } from '../src/constants/colors'
 import { sizes } from '../src/constants/theme'
 
 import HomeScreen from '../src/screens/HomeScreen'
 import DiaryScreen from '../src/screens/DiaryScreen'
-import ProfileScreen from '../src/screens/ProfileScreen'
 import RemedyScreen from '../src/screens/RemedyScreen'
+import ProfileScreen from '../src/screens/ProfileScreen'
 
 type Props = {}
 
