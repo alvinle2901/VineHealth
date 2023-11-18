@@ -10,7 +10,7 @@ import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 
 import { db, storage } from '../../firebase.config'
-import { doc, setDoc } from 'firebase/firestore'
+import { doc, updateDoc } from 'firebase/firestore'
 import { getAuth, updateProfile } from 'firebase/auth'
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
 
@@ -82,7 +82,7 @@ const EditProfileScreen = ({ route, navigation }: Props) => {
         photoURL: image
       })
         .then(async () => {
-          await setDoc(doc(db, 'users', currentUser.uid), {
+          await updateDoc(doc(db, 'users', currentUser.uid), {
             phoneNumber: phoneNum
           }).then(() => {
             navigation.navigate('Profile')

@@ -31,28 +31,22 @@ const HomeScreen = ({ navigation }: Props) => {
   const [expanded, setExpanded] = useState(false)
   const [feedback, setFeedback] = useState<Feedback[]>([])
 
-  const collectIdsAndDocs = (doc: { id: any; data: () => any }) => {
-    return { id: doc.id, ...doc.data() }
-  }
-
   // fetch feedback data from firebase
   const fetchFeedbackData = async () => {
     const q = query(collection(db, 'Feedback'), orderBy('timeCreated', 'desc'))
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const feedbacks: Feedback[] = []
-      const data = querySnapshot.docs.map(collectIdsAndDocs)
-      storeFeedback(data)
-
       querySnapshot.forEach((doc) => {
-        const recipe = doc.data()
+        const data = doc.data()
         feedbacks.push({
-          comment: recipe.comment,
-          symptom: recipe.symptom,
-          title: recipe.title,
-          timeCreated: timestampMillis(recipe.timeCreated)
+          comment: data.comment,
+          symptom: data.symptom,
+          title: data.title,
+          timeCreated: timestampMillis(data.timeCreated)
         })
       })
       setFeedback(feedbacks)
+      storeFeedback(feedbacks)
     })
   }
 
