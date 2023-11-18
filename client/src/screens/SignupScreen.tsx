@@ -7,6 +7,8 @@ import {
 } from 'firebase/auth'
 import HideWithKeyboard from 'react-native-hide-with-keyboard'
 import Toast from 'react-native-root-toast'
+import { doc, setDoc } from 'firebase/firestore'
+import { db } from '../../firebase.config'
 
 import { colors } from '../constants/colors'
 import { storeUser } from '../utils/storage'
@@ -34,22 +36,20 @@ const SignupScreen = ({ navigation }: Props) => {
           displayName: name,
           photoURL: imgUrl
         })
-          .then(() => {
-            // Profile updated!
-            // ...
+          .then(async () => {
+            //link uid to firestore
+            await setDoc(doc(db, 'users', user.uid), {})
+            Toast.show('Sign up successfully!', {
+              duration: Toast.durations.SHORT,
+              backgroundColor: 'white',
+              textColor: 'black'
+            })
+            navigation.navigate('Main', { screen: 'Home' })
+            storeUser(user)
           })
           .catch((error) => {
             // An error occurred
-            // ...
           })
-
-        Toast.show('Sign up successfully!', {
-          duration: Toast.durations.SHORT,
-          backgroundColor: 'white',
-          textColor: 'black'
-        })
-        navigation.navigate('Main', { screen: 'Home' })
-        storeUser(user)
       })
       .catch((error) => {
         const errorCode = error.code
@@ -67,13 +67,19 @@ const SignupScreen = ({ navigation }: Props) => {
 
         {/* TextInput */}
         <View style={styles.inputItem}>
-          <FormInput placeHolder={'Name'} value={name} setValue={setName} />
+          <FormInput
+            placeHolder={'Name'}
+            value={name}
+            setValue={setName}
+            editable={true}
+          />
         </View>
         <View style={styles.inputItem}>
           <FormInput
             placeHolder={'Email Address'}
             value={email}
             setValue={setEmail}
+            editable={true}
           />
         </View>
         <View style={styles.inputItem}>
@@ -81,6 +87,7 @@ const SignupScreen = ({ navigation }: Props) => {
             placeHolder={'Password'}
             value={password}
             setValue={setPassword}
+            editable={true}
           />
         </View>
         {/* Upload img */}

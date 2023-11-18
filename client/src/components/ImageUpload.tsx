@@ -36,8 +36,6 @@ const ImageUpload = ({ setImg }: Props) => {
         setUploaded(true)
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImg(downloadURL)
-          //set images with url from database
-          // setPickedImages([...pickedImages, { uri: downloadURL }])
         })
       }
     )

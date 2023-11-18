@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   StyleSheet,
   SafeAreaView,
@@ -22,23 +22,13 @@ type Props = {
 
 const ProfileScreen = ({ navigation }: Props) => {
   const auth = getAuth(app)
+  const user = auth.currentUser
+  const uri: any = user?.photoURL
 
-  const [data, setData] = useState<any>({})
   const [form, setForm] = useState({
     language: 'English',
     darkMode: true
   })
-
-  const getUserData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('my-key')
-      const value = jsonValue != null ? JSON.parse(jsonValue) : {}
-      setData(value)
-      return
-    } catch (e) {
-      // error reading value
-    }
-  }
 
   const handleLogout = () => {
     signOut(auth)
@@ -51,26 +41,22 @@ const ProfileScreen = ({ navigation }: Props) => {
       })
   }
 
-  useEffect(() => {
-    getUserData()
-  }, [])
-
   return (
     <SafeAreaView style={{ backgroundColor: '#f6f6f6' }}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.profile}>
           <Image
             source={{
-              uri: data.photoURL
+              uri: uri
             }}
             style={styles.profileAvatar}
           />
-          <Text style={styles.profileName}>{data.displayName}</Text>
-          <Text style={styles.profileEmail}>{data.email}</Text>
+          <Text style={styles.profileName}>{user?.displayName}</Text>
+          <Text style={styles.profileEmail}>{user?.email}</Text>
           {/* Edit */}
           <TouchableOpacity
             onPress={() => {
-              // handle onPress
+              navigation.navigate('Edit Profile', { user: user })
             }}
           >
             <View style={styles.profileAction}>

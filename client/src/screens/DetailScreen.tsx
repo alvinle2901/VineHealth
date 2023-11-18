@@ -10,28 +10,28 @@ import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { colors } from '../constants/colors'
-import { timestampMillis } from '../utils/convertTime'
+import { Feedback } from '../constants/modal'
 import FeedbackCard from '../components/FeedbackCard'
 
 type Props = {
   route: any
-  navigation: any
 }
 
-const DetailScreen = ({ route, navigation }: Props) => {
+const DetailScreen = ({ route }: Props) => {
   const { item } = route.params
-  const [feedback, setFeedback] = useState([])
+  const [feedback, setFeedback] = useState<Feedback[]>([])
   const [expanded, setExpanded] = useState(false)
 
   // get Feedbacks
   const getFeedbacks = async () => {
-    let data = []
     try {
       const jsonValue = await AsyncStorage.getItem('feedback')
       const value = jsonValue != null ? JSON.parse(jsonValue) : []
       // filter data
-      data = value
-      setFeedback(data.filter((feedback: { title: any }) => feedback.title == item.title))
+      const data: Feedback[] = value
+      setFeedback(
+        data.filter((feedback: { title: string }) => feedback.title == item.title)
+      )
       return
     } catch (e) {
       // error reading value
@@ -81,55 +81,41 @@ const DetailScreen = ({ route, navigation }: Props) => {
         </Text>
         {expanded ? (
           <>
-            {feedback.map(
-              (
-                { name, comment, symptom, photoURL, title, timeCreated },
-                index
-              ) => {
+            {feedback.map(({ comment, symptom, title, timeCreated }, index) => {
+              return (
+                <>
+                  <FeedbackCard
+                    comment={comment}
+                    symptom={symptom}
+                    title={title}
+                    timeCreated={timeCreated}
+                  />
+                  <View>
+                    <View style={styles.verticalLine}></View>
+                  </View>
+                </>
+              )
+            })}
+          </>
+        ) : (
+          <>
+            {feedback
+              .slice(0, 3)
+              .map(({ comment, symptom, title, timeCreated }, index) => {
                 return (
                   <>
                     <FeedbackCard
-                      name={name}
                       comment={comment}
                       symptom={symptom}
-                      photoURL={photoURL}
                       title={title}
-                      timeCreated={timestampMillis(timeCreated)}
+                      timeCreated={timeCreated}
                     />
                     <View>
                       <View style={styles.verticalLine}></View>
                     </View>
                   </>
                 )
-              }
-            )}
-          </>
-        ) : (
-          <>
-            {feedback
-              .slice(0, 3)
-              .map(
-                (
-                  { name, comment, symptom, photoURL, title, timeCreated },
-                  index
-                ) => {
-                  return (
-                    <>
-                      <FeedbackCard
-                        name={name}
-                        comment={comment}
-                        symptom={symptom}
-                        photoURL={photoURL}
-                        title={title}
-                        timeCreated={timestampMillis(timeCreated)}
-                      />
-                      <View>
-                        <View style={styles.verticalLine}></View>
-                      </View>
-                    </>
-                  )
-                }
-              )}
+              })}
           </>
         )}
 

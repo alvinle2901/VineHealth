@@ -8,8 +8,9 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { RadioButton } from 'react-native-paper'
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../../firebase.config'
+import { getAuth } from 'firebase/auth'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 
 import { colors } from '../constants/colors'
 import { remedies } from '../constants/data'
@@ -18,22 +19,16 @@ import CloseButton from './CloseButton'
 import RadioSleepQuality from './RadioSleepQuality'
 
 type Props = {
-  user: string
   img: any
   title: string
   id: number
   navigation: any
-  photoURL: string
 }
 
-const PracticeCard = ({
-  user,
-  title,
-  img,
-  id,
-  navigation,
-  photoURL
-}: Props) => {
+const PracticeCard = ({ title, img, id, navigation }: Props) => {
+  const auth = getAuth()
+  const user = auth.currentUser
+
   const [visible, setVisible] = useState(true)
   const [uploaded, setUploaded] = useState(false)
   const [checked, setChecked] = useState('')
@@ -42,9 +37,9 @@ const PracticeCard = ({
   // upload Feedback
   const uploadData = async () => {
     const docRef = await addDoc(collection(db, 'Feedback'), {
-      name: user,
+      name: user?.displayName,
       comment: feeling,
-      photoURL: photoURL,
+      photoURL: user?.photoURL,
       title: title,
       symptom: 'headache',
       timeCreated: serverTimestamp()

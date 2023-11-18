@@ -7,8 +7,8 @@ import {
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { db } from '../../firebase.config'
+import { getAuth } from 'firebase/auth'
 import { collection, query, onSnapshot, orderBy } from 'firebase/firestore'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Feedback } from '../constants/modal'
 import { colors } from '../constants/colors'
@@ -25,54 +25,33 @@ type Props = {
 }
 
 const HomeScreen = ({ navigation }: Props) => {
-  const [user, setUser] = useState('')
-  const [photoURL, setPhotoURL] = useState('')
+  const auth = getAuth()
+  const user = auth.currentUser
+
   const [expanded, setExpanded] = useState(false)
   const [feedback, setFeedback] = useState<Feedback[]>([])
 
-  const collectIdsAndDocs = (doc: { id: any; data: () => any }) => {
-    return { id: doc.id, ...doc.data() }
-  }
-
-  // fetch data from firebase
+  // fetch feedback data from firebase
   const fetchFeedbackData = async () => {
     const q = query(collection(db, 'Feedback'), orderBy('timeCreated', 'desc'))
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const feedbacks: Feedback[] = []
-      const data = querySnapshot.docs.map(collectIdsAndDocs)
-      storeFeedback(data)
-
       querySnapshot.forEach((doc) => {
-        const recipe = doc.data()
+        const data = doc.data()
         feedbacks.push({
-          name: recipe.name,
-          comment: recipe.comment,
-          symptom: recipe.symptom,
-          photoURL: recipe.photoURL,
-          title: recipe.title,
-          timeCreated: timestampMillis(recipe.timeCreated)
+          comment: data.comment,
+          symptom: data.symptom,
+          title: data.title,
+          timeCreated: timestampMillis(data.timeCreated)
         })
       })
       setFeedback(feedbacks)
+      storeFeedback(feedbacks)
     })
-  }
-
-  // get UserData
-  const getUserData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('my-key')
-      const value = jsonValue != null ? JSON.parse(jsonValue) : {}
-      setUser(value.displayName)
-      setPhotoURL(value.photoURL)
-      return
-    } catch (e) {
-      // error reading value
-    }
   }
 
   useEffect(() => {
     fetchFeedbackData()
-    getUserData()
   }, [])
 
   return (
@@ -80,7 +59,7 @@ const HomeScreen = ({ navigation }: Props) => {
       <View style={{ margin: 20, marginTop: -20 }}>
         <View style={styles.statusHeader}>
           {/* Header */}
-          <Text style={styles.heading}>Hello, {user}!</Text>
+          <Text style={styles.heading}>Hello, {user?.displayName}!</Text>
 
           {/* Edit Button */}
           <TouchableOpacity onPress={() => navigation.navigate('Symptoms')}>
@@ -96,9 +75,7 @@ const HomeScreen = ({ navigation }: Props) => {
           {remedies.map(({ title, img, id }, index) => {
             return (
               <PracticeCard
-                user={user}
                 title={title}
-                photoURL={photoURL}
                 img={img}
                 id={id}
                 navigation={navigation}
@@ -113,45 +90,31 @@ const HomeScreen = ({ navigation }: Props) => {
         </Text>
         {expanded ? (
           <>
-            {feedback.map(
-              (
-                { name, comment, symptom, photoURL, title, timeCreated },
-                index
-              ) => {
-                return (
-                  <FeedbackCard
-                    name={name}
-                    comment={comment}
-                    symptom={symptom}
-                    photoURL={photoURL}
-                    title={title}
-                    timeCreated={timeCreated}
-                  />
-                )
-              }
-            )}
+            {feedback.map(({ comment, symptom, title, timeCreated }, index) => {
+              return (
+                <FeedbackCard
+                  comment={comment}
+                  symptom={symptom}
+                  title={title}
+                  timeCreated={timeCreated}
+                />
+              )
+            })}
           </>
         ) : (
           <>
             {feedback
               .slice(0, 3)
-              .map(
-                (
-                  { name, comment, symptom, photoURL, title, timeCreated },
-                  index
-                ) => {
-                  return (
-                    <FeedbackCard
-                      name={name}
-                      comment={comment}
-                      symptom={symptom}
-                      photoURL={photoURL}
-                      title={title}
-                      timeCreated={timeCreated}
-                    />
-                  )
-                }
-              )}
+              .map(({ comment, symptom, title, timeCreated }, index) => {
+                return (
+                  <FeedbackCard
+                    comment={comment}
+                    symptom={symptom}
+                    title={title}
+                    timeCreated={timeCreated}
+                  />
+                )
+              })}
           </>
         )}
 

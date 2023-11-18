@@ -6,6 +6,7 @@ import Symptoms from '../src/screens/SymptomScreen'
 import DetailScreen from '../src/screens/DetailScreen'
 import { TouchableOpacity, Image } from 'react-native'
 import LoginScreen from '../src/screens/LoginScreen'
+import EditProfileScreen from '../src/screens/EditProfileScreen'
 
 type Props = {}
 
@@ -36,6 +37,7 @@ const Main = (props: Props) => {
       />
       <Stack.Screen name="Symptoms" component={Symptoms} />
       <Stack.Screen name="Detail" component={DetailScreen} />
+      <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
       <Stack.Screen
         name="Login"
         component={LoginScreen}

@@ -49,6 +49,7 @@ const LoginScreen = ({ navigation }: Props) => {
             placeHolder={'Email Address'}
             value={email}
             setValue={setEmail}
+            editable={true}
           />
         </View>
         <View style={styles.inputItem}>
@@ -56,6 +57,7 @@ const LoginScreen = ({ navigation }: Props) => {
             placeHolder={'Password'}
             value={password}
             setValue={setPassword}
+            editable={true}
           />
         </View>
         {/* Login Button */}
