@@ -1,9 +1,8 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { DocumentData } from 'firebase/firestore'
 
 import { colors } from '../constants/colors'
-import { Feedback } from '../constants/modal'
+import { Feedback, UserData } from '../constants/modal'
 import { formatTimeAgo } from '../utils/convertTime'
 import { getUserData } from '../utils/get'
 
@@ -13,7 +12,7 @@ type Props = {
 
 const FeedbackCard = ({ feedback }: Props) => {
   const date = new Date(feedback.timeCreated)
-  const [user, setUser] = useState<DocumentData>()
+  const [user, setUser] = useState<UserData>()
 
   const getData = async () => {
     const data = await getUserData(feedback.uid)

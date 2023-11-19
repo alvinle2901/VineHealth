@@ -8,15 +8,7 @@ import {
 import React, { useEffect, useState } from 'react'
 import { db } from '../../firebase.config'
 import { getAuth } from 'firebase/auth'
-import {
-  collection,
-  query,
-  onSnapshot,
-  orderBy,
-  DocumentData
-} from 'firebase/firestore'
-
-import { doc, getDoc } from 'firebase/firestore'
+import { collection, query, onSnapshot, orderBy } from 'firebase/firestore'
 
 import { Feedback } from '../constants/modal'
 import { colors } from '../constants/colors'
@@ -27,7 +19,6 @@ import { timestampMillis } from '../utils/convertTime'
 import FeedbackCard from '../components/FeedbackCard'
 import CurrentStatus from '../components/CurrentStatus'
 import PracticeCard from '../components/PracticeCard'
-import { getUserData } from '../utils/get'
 
 type Props = {
   navigation: any
@@ -53,7 +44,7 @@ const HomeScreen = ({ navigation }: Props) => {
           symptom: data.symptom,
           title: data.title,
           timeCreated: timestampMillis(data.timeCreated),
-          uid: data.uid
+          uid: data.userId
         })
       })
       setFeedbacks(fbData)

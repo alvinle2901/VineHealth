@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import * as SplashScreen from 'expo-splash-screen'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import Main from './navigations/Main'
 import Auth from './navigations/Auth'
@@ -19,7 +20,21 @@ function App() {
     SFProText: require('./assets/fonts/SF-Pro-Text-Regular.otf')
   })
 
+  // get user data
+  const getUserData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('my-key')
+      if (jsonValue) {
+        setIsLogin(true)
+      }
+      return jsonValue != null ? JSON.parse(jsonValue) : null
+    } catch (e) {
+      // error reading value
+    }
+  }
+
   useEffect(() => {
+    getUserData()
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
