@@ -24,5 +24,7 @@ export const formatTimeAgo = (timestamp: any) => {
 }
 
 export const timestampMillis = (timestamp: any) => {
-  return timestamp.seconds * 1000 + timestamp.nanoseconds / 1e6
+  if (timestamp != null) {
+    return timestamp.seconds * 1000 + timestamp.nanoseconds / 1e6
+  } else return 0
 }

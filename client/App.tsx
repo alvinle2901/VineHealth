@@ -32,7 +32,9 @@ function App() {
   // load fonts
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
-      await SplashScreen.hideAsync()
+      setTimeout(async () => {
+        await SplashScreen.hideAsync()
+      }, 1000)
     }
   }, [fontsLoaded])
 
