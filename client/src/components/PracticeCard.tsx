@@ -37,12 +37,11 @@ const PracticeCard = ({ title, img, id, navigation }: Props) => {
   // upload Feedback
   const uploadData = async () => {
     const docRef = await addDoc(collection(db, 'Feedback'), {
-      name: user?.displayName,
       comment: feeling,
-      photoURL: user?.photoURL,
       title: title,
       symptom: 'headache',
-      timeCreated: serverTimestamp()
+      timeCreated: serverTimestamp(),
+      userId: user?.uid
     })
   }
 

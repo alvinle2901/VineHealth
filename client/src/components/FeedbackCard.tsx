@@ -1,24 +1,34 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
-import React from 'react'
-import { getAuth } from 'firebase/auth'
+import React, { useEffect, useState } from 'react'
+import { DocumentData } from 'firebase/firestore'
 
 import { colors } from '../constants/colors'
 import { Feedback } from '../constants/modal'
 import { formatTimeAgo } from '../utils/convertTime'
+import { getUserData } from '../utils/get'
 
-type Props = Feedback
+type Props = {
+  feedback: Feedback
+}
 
-const FeedbackCard = ({ comment, symptom, title, timeCreated }: Props) => {
-  const date = new Date(timeCreated)
-  const auth = getAuth()
-  const user = auth.currentUser
-  const uri: any = user?.photoURL
+const FeedbackCard = ({ feedback }: Props) => {
+  const date = new Date(feedback.timeCreated)
+  const [user, setUser] = useState<DocumentData>()
+
+  const getData = async () => {
+    const data = await getUserData(feedback.uid)
+    setUser(data)
+  }
+
+  useEffect(() => {
+    getData()
+  })
 
   return (
     <View style={styles.card}>
       <View style={{ marginRight: 15 }}>
         {/* Image */}
-        <Image style={styles.avatar} source={{ uri: uri }} />
+        <Image style={styles.avatar} source={{ uri: user?.photoURL }} />
 
         {/* Time */}
         <Text style={styles.time}>{formatTimeAgo(date)}</Text>
@@ -26,17 +36,17 @@ const FeedbackCard = ({ comment, symptom, title, timeCreated }: Props) => {
       <View style={{ flex: 1 }}>
         <View style={styles.titleContainer}>
           {/* Title */}
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title}>{feedback.title}</Text>
 
           {/* Symptom */}
-          <Text style={[styles.statusTag]}>{symptom}</Text>
+          <Text style={[styles.statusTag]}>{feedback.symptom}</Text>
         </View>
         <View style={styles.line}></View>
 
         {/* Name */}
         <View style={{ flexDirection: 'row', marginTop: 5 }}>
           <Text style={styles.header}>Name: </Text>
-          <Text style={styles.content}>{user?.displayName}</Text>
+          <Text style={styles.content}>{user?.name}</Text>
         </View>
 
         {/* Comment */}
@@ -53,7 +63,7 @@ const FeedbackCard = ({ comment, symptom, title, timeCreated }: Props) => {
               }
             ]}
           >
-            "{comment}"
+            "{feedback.comment}"
           </Text>
         </View>
       </View>
@@ -130,6 +140,6 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.primary,
     overflow: 'hidden',
-    marginTop :2
+    marginTop: 2
   }
 })

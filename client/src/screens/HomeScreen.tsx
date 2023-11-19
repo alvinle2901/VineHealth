@@ -8,7 +8,15 @@ import {
 import React, { useEffect, useState } from 'react'
 import { db } from '../../firebase.config'
 import { getAuth } from 'firebase/auth'
-import { collection, query, onSnapshot, orderBy } from 'firebase/firestore'
+import {
+  collection,
+  query,
+  onSnapshot,
+  orderBy,
+  DocumentData
+} from 'firebase/firestore'
+
+import { doc, getDoc } from 'firebase/firestore'
 
 import { Feedback } from '../constants/modal'
 import { colors } from '../constants/colors'
@@ -19,6 +27,7 @@ import { timestampMillis } from '../utils/convertTime'
 import FeedbackCard from '../components/FeedbackCard'
 import CurrentStatus from '../components/CurrentStatus'
 import PracticeCard from '../components/PracticeCard'
+import { getUserData } from '../utils/get'
 
 type Props = {
   navigation: any
@@ -29,24 +38,26 @@ const HomeScreen = ({ navigation }: Props) => {
   const user = auth.currentUser
 
   const [expanded, setExpanded] = useState(false)
-  const [feedback, setFeedback] = useState<Feedback[]>([])
+  const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
 
-  // fetch feedback data from firebase
-  const fetchFeedbackData = async () => {
+  // fetch feedbacks data from firebase
+  const fetchFeedbackData = () => {
     const q = query(collection(db, 'Feedback'), orderBy('timeCreated', 'desc'))
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const feedbacks: Feedback[] = []
-      querySnapshot.forEach((doc) => {
-        const data = doc.data()
-        feedbacks.push({
+      const fbData: Feedback[] = []
+
+      querySnapshot.forEach(async (document) => {
+        const data = document.data()
+        fbData.push({
           comment: data.comment,
           symptom: data.symptom,
           title: data.title,
-          timeCreated: timestampMillis(data.timeCreated)
+          timeCreated: timestampMillis(data.timeCreated),
+          uid: data.uid
         })
       })
-      setFeedback(feedbacks)
-      storeFeedback(feedbacks)
+      setFeedbacks(fbData)
+      storeFeedback(fbData)
     })
   }
 
@@ -91,38 +102,20 @@ const HomeScreen = ({ navigation }: Props) => {
         </Text>
         {expanded ? (
           <>
-            {feedback.map(({ comment, symptom, title, timeCreated }, index) => {
-              return (
-                <FeedbackCard
-                  key={index}
-                  comment={comment}
-                  symptom={symptom}
-                  title={title}
-                  timeCreated={timeCreated}
-                />
-              )
+            {feedbacks.map((feedback, index) => {
+              return <FeedbackCard key={index} feedback={feedback} />
             })}
           </>
         ) : (
           <>
-            {feedback
-              .slice(0, 3)
-              .map(({ comment, symptom, title, timeCreated }, index) => {
-                return (
-                  <FeedbackCard
-                    key={index}
-                    comment={comment}
-                    symptom={symptom}
-                    title={title}
-                    timeCreated={timeCreated}
-                  />
-                )
-              })}
+            {feedbacks.slice(0, 3).map((feedback, index) => {
+              return <FeedbackCard key={index} feedback={feedback} />
+            })}
           </>
         )}
 
         {/* More button */}
-        {feedback.length > 3 && (
+        {feedbacks.length > 3 && (
           <TouchableOpacity
             onPress={() => {
               setExpanded(!expanded)

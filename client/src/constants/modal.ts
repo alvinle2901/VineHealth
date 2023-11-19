@@ -12,6 +12,7 @@ export type Feedback = {
   symptom: string
   title: string
   timeCreated: number
+  uid: string
 }
 
 export type UserData = {

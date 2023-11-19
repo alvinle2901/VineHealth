@@ -19,7 +19,7 @@ type Props = {
 
 const DetailScreen = ({ route }: Props) => {
   const { item } = route.params
-  const [feedback, setFeedback] = useState<Feedback[]>([])
+  const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
   const [expanded, setExpanded] = useState(false)
 
   // get Feedbacks
@@ -29,7 +29,7 @@ const DetailScreen = ({ route }: Props) => {
       const value = jsonValue != null ? JSON.parse(jsonValue) : []
       // filter data
       const data: Feedback[] = value
-      setFeedback(
+      setFeedbacks(
         data.filter(
           (feedback: { title: string }) => feedback.title == item.title
         )
@@ -83,16 +83,10 @@ const DetailScreen = ({ route }: Props) => {
         </Text>
         {expanded ? (
           <>
-            {feedback.map(({ comment, symptom, title, timeCreated }, index) => {
+            {feedbacks.map((feedback, index) => {
               return (
                 <>
-                  <FeedbackCard
-                    key={index}
-                    comment={comment}
-                    symptom={symptom}
-                    title={title}
-                    timeCreated={timeCreated}
-                  />
+                  <FeedbackCard key={index} feedback={feedback} />
                   <View>
                     <View style={styles.verticalLine}></View>
                   </View>
@@ -102,29 +96,21 @@ const DetailScreen = ({ route }: Props) => {
           </>
         ) : (
           <>
-            {feedback
-              .slice(0, 3)
-              .map(({ comment, symptom, title, timeCreated }, index) => {
-                return (
-                  <>
-                    <FeedbackCard
-                      key={index}
-                      comment={comment}
-                      symptom={symptom}
-                      title={title}
-                      timeCreated={timeCreated}
-                    />
-                    <View>
-                      <View style={styles.verticalLine}></View>
-                    </View>
-                  </>
-                )
-              })}
+            {feedbacks.slice(0, 3).map((feedback, index) => {
+              return (
+                <>
+                  <FeedbackCard key={index} feedback={feedback} />
+                  <View>
+                    <View style={styles.verticalLine}></View>
+                  </View>
+                </>
+              )
+            })}
           </>
         )}
 
         {/* More button */}
-        {feedback.length > 3 && (
+        {feedbacks.length > 3 && (
           <TouchableOpacity
             onPress={() => {
               setExpanded(!expanded)
