@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { useFonts } from 'expo-font'
-import { useCallback, useState } from 'react'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { useCallback, useEffect, useState } from 'react'
 import { RootSiblingParent } from 'react-native-root-siblings'
 import { NavigationContainer } from '@react-navigation/native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import * as SplashScreen from 'expo-splash-screen'
 
@@ -19,15 +19,18 @@ function App() {
     SFProText: require('./assets/fonts/SF-Pro-Text-Regular.otf')
   })
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-      setIsLogin(true)
-    } else {
-      console.log('User is signed out')
-    }
-  })
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        setIsLogin(true)
+      } else {
+        setIsLogin(false)
+        console.log('User is signed out')
+      }
+    })
+  }, [])
 
   // load fonts
   const onLayoutRootView = useCallback(async () => {

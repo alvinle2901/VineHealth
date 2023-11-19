@@ -4,7 +4,6 @@ import { TouchableOpacity, Image } from 'react-native'
 
 import Tabs from './Tabs'
 import Symptoms from '../src/screens/SymptomScreen'
-import LoginScreen from '../src/screens/LoginScreen'
 import DetailScreen from '../src/screens/DetailScreen'
 import EditProfileScreen from '../src/screens/EditProfileScreen'
 
@@ -38,11 +37,6 @@ const Main = (props: Props) => {
       <Stack.Screen name="Symptoms" component={Symptoms} />
       <Stack.Screen name="Detail" component={DetailScreen} />
       <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{ headerShown: false }}
-      />
     </Stack.Navigator>
   )
 }

@@ -28,7 +28,6 @@ const LoginScreen = ({ navigation }: Props) => {
           backgroundColor: 'white',
           textColor: 'black'
         })
-        navigation.navigate('Main', { screen: 'Home' })
         storeUser(user)
       })
       .catch((error) => {

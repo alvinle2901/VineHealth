@@ -1,5 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import React, { useState } from 'react'
 import {
   StyleSheet,
   SafeAreaView,
@@ -10,8 +8,10 @@ import {
   TouchableOpacity,
   Switch
 } from 'react-native'
+import React, { useState } from 'react'
 import { getAuth, signOut } from 'firebase/auth'
 import { app } from '../../firebase.config'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { colors } from '../constants/colors'
 import { SECTIONS } from '../constants/data'
@@ -30,11 +30,10 @@ const ProfileScreen = ({ navigation }: Props) => {
     darkMode: true
   })
 
-  const handleLogout = () => {
-    signOut(auth)
+  const handleLogout = async () => {
+    await signOut(auth)
       .then(async () => {
         await AsyncStorage.removeItem('my-key')
-        navigation.navigate('Login')
       })
       .catch((error) => {
         console.log(error)
