@@ -9,9 +9,9 @@ import {
 import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 
-import { db, storage } from '../../firebase.config'
+import { getAuth } from 'firebase/auth'
 import { doc, updateDoc } from 'firebase/firestore'
-import { getAuth, updateProfile } from 'firebase/auth'
+import { app, db, storage } from '../../firebase.config'
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
 
 import { colors } from '../constants/colors'
@@ -25,12 +25,11 @@ type Props = {
 
 const EditProfileScreen = ({ route, navigation }: Props) => {
   const { user } = route.params
-  const auth = getAuth()
-  const currentUser = auth.currentUser
+  const auth = getAuth(app)
 
-  const [image, setImage] = useState(user.photoURL)
-  const [name, setName] = useState(user.displayName)
+  const [name, setName] = useState(user.name)
   const [email, setEmail] = useState(user.email)
+  const [image, setImage] = useState(user.photoURL)
   const [phoneNum, setPhoneNum] = useState('')
 
   //upload image to storage
@@ -71,31 +70,24 @@ const EditProfileScreen = ({ route, navigation }: Props) => {
     if (!result.canceled) {
       await uploadImage(result.assets[0].uri)
     }
-    2
   }
 
   // update data
-  const submitHandler = () => {
-    if (currentUser) {
-      updateProfile(currentUser, {
-        displayName: name,
-        photoURL: image
+  const submitHandler = async () => {
+    if (auth.currentUser) {
+      await updateDoc(doc(db, 'users', auth.currentUser.uid), {
+        name: name,
+        photoURL: image,
+        phoneNumber: phoneNum
+      }).then(() => {
+        navigation.navigate('Profile')
+
+        Toast.show('Update successfully!', {
+          duration: Toast.durations.SHORT,
+          backgroundColor: 'white',
+          textColor: 'black'
+        })
       })
-        .then(async () => {
-          await updateDoc(doc(db, 'users', currentUser.uid), {
-            phoneNumber: phoneNum
-          }).then(() => {
-            navigation.navigate('Profile')
-            Toast.show('Update successfully!', {
-              duration: Toast.durations.SHORT,
-              backgroundColor: 'white',
-              textColor: 'black'
-            })
-          })
-        })
-        .catch((error) => {
-          console.log(error)
-        })
     }
   }
 

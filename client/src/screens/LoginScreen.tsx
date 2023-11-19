@@ -1,12 +1,13 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
+import Toast from 'react-native-root-toast'
+import HideWithKeyboard from 'react-native-hide-with-keyboard'
 import { app } from '../../firebase.config'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-import HideWithKeyboard from 'react-native-hide-with-keyboard'
-import Toast from 'react-native-root-toast'
 
 import { colors } from '../constants/colors'
 import { storeUser } from '../utils/storage'
+import { getUserData } from '../utils/get'
 import FormInput from '../components/FormInput'
 
 type Props = { navigation: any }
@@ -20,15 +21,20 @@ const LoginScreen = ({ navigation }: Props) => {
   // Sign in handler
   const submitHandler = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user
+        const userData = await getUserData(user.uid)
+
         Toast.show('Sign in successfully!', {
           duration: Toast.durations.SHORT,
           backgroundColor: 'white',
           textColor: 'black'
         })
-        storeUser(user)
+
+        if (userData) {
+          storeUser(userData)
+        }
       })
       .catch((error) => {
         const errorCode = error.code

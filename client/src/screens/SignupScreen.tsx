@@ -1,16 +1,14 @@
 import { Text, TouchableOpacity, View, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  updateProfile
-} from 'firebase/auth'
-import HideWithKeyboard from 'react-native-hide-with-keyboard'
 import Toast from 'react-native-root-toast'
-import { doc, setDoc } from 'firebase/firestore'
+import HideWithKeyboard from 'react-native-hide-with-keyboard'
+
 import { db } from '../../firebase.config'
+import { doc, setDoc } from 'firebase/firestore'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 
 import { colors } from '../constants/colors'
+import { UserData } from '../constants/modal'
 import { storeUser } from '../utils/storage'
 
 import FormInput from '../components/FormInput'
@@ -29,27 +27,22 @@ const SignupScreen = ({ navigation }: Props) => {
   // Sign up handler
   const submitHandler = () => {
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user
-        // update user profile
-        updateProfile(user, {
-          displayName: name,
-          photoURL: imgUrl
+        const userData: UserData = {
+          name: name,
+          phoneNumber: '',
+          photoURL: imgUrl,
+          email: email
+        }
+        //link uid to firestore
+        await setDoc(doc(db, 'users', user.uid), userData)
+        Toast.show('Sign up successfully!', {
+          duration: Toast.durations.SHORT,
+          backgroundColor: 'white',
+          textColor: 'black'
         })
-          .then(async () => {
-            //link uid to firestore
-            await setDoc(doc(db, 'users', user.uid), {})
-            Toast.show('Sign up successfully!', {
-              duration: Toast.durations.SHORT,
-              backgroundColor: 'white',
-              textColor: 'black'
-            })
-            navigation.navigate('Main', { screen: 'Home' })
-            storeUser(user)
-          })
-          .catch((error) => {
-            // An error occurred
-          })
+        storeUser(userData)
       })
       .catch((error) => {
         const errorCode = error.code

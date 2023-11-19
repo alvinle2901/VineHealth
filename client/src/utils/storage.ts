@@ -1,9 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { User } from 'firebase/auth'
-import { Feedback } from '../constants/modal'
+import { Feedback, UserData } from '../constants/modal'
 
 // Store user data
-export const storeUser = async (value: string | User) => {
+export const storeUser = async (value: UserData) => {
   try {
     const jsonValue = JSON.stringify(value)
     await AsyncStorage.setItem('my-key', jsonValue)

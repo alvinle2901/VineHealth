@@ -16,5 +16,8 @@ export type Feedback = {
 }
 
 export type UserData = {
+  name: string
   phoneNumber: string
+  photoURL: string
+  email: string
 }

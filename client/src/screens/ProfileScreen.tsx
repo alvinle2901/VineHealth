@@ -8,13 +8,14 @@ import {
   TouchableOpacity,
   Switch
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getAuth, signOut } from 'firebase/auth'
 import { app } from '../../firebase.config'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { colors } from '../constants/colors'
 import { SECTIONS } from '../constants/data'
+import { UserData } from '../constants/modal'
 
 type Props = {
   navigation: any
@@ -22,8 +23,7 @@ type Props = {
 
 const ProfileScreen = ({ navigation }: Props) => {
   const auth = getAuth(app)
-  const user = auth.currentUser
-  const uri: any = user?.photoURL
+  const [data, setData] = useState<UserData>()
 
   const [form, setForm] = useState({
     language: 'English',
@@ -40,22 +40,38 @@ const ProfileScreen = ({ navigation }: Props) => {
       })
   }
 
+  const getUserData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('my-key')
+      const value = jsonValue != null ? JSON.parse(jsonValue) : {}
+      const userData: UserData = value
+      setData(userData)
+      return
+    } catch (e) {
+      // error reading value
+    }
+  }
+
+  useEffect(() => {
+    getUserData()
+  }, [])
+
   return (
     <SafeAreaView style={{ backgroundColor: '#f6f6f6' }}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.profile}>
           <Image
             source={{
-              uri: uri
+              uri: data?.photoURL
             }}
             style={styles.profileAvatar}
           />
-          <Text style={styles.profileName}>{user?.displayName}</Text>
-          <Text style={styles.profileEmail}>{user?.email}</Text>
+          <Text style={styles.profileName}>{data?.name}</Text>
+          <Text style={styles.profileEmail}>{data?.email}</Text>
           {/* Edit */}
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Edit Profile', { user: user })
+              navigation.navigate('Edit Profile', { user: data })
             }}
           >
             <View style={styles.profileAction}>
