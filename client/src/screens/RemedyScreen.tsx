@@ -4,20 +4,23 @@ import Carousel from 'react-native-snap-carousel'
 
 import { colors } from '../constants/colors'
 import { Remedy } from '../constants/modal'
-import { remedies } from '../constants/data'
 import { sizes } from '../constants/theme'
+import { getRemedyList } from '../utils/string'
 
 type RemedyProps = {
   item: Remedy
   index: any
-  // navigation: any
 }
 
 type Props = {
   navigation: any
+  route: any
 }
 
-const RemedyScreen = ({ navigation }: Props) => {
+const RemedyScreen = ({ navigation, route }: Props) => {
+  // filter the list of remedies based on symptom
+  const { symptom } = route.params
+  const remedyList: Remedy[] = getRemedyList(symptom)
   const [selectedRemedies, setSelectedRemedies] = useState<boolean[]>([])
 
   const selectRemedy = (index: string | number) => {
@@ -46,7 +49,7 @@ const RemedyScreen = ({ navigation }: Props) => {
           {/* Pagination */}
           <View style={styles.pagination}>
             <Text style={styles.paginationText}>
-              {index + 1}/{remedies.length}
+              {index + 1}/{remedyList.length}
             </Text>
           </View>
         </>
@@ -115,7 +118,7 @@ const RemedyScreen = ({ navigation }: Props) => {
         {/* Pagination */}
         <View style={styles.pagination}>
           <Text style={styles.paginationText}>
-            {index + 1}/{remedies.length}
+            {index + 1}/{remedyList.length}
           </Text>
         </View>
       </>
@@ -124,7 +127,7 @@ const RemedyScreen = ({ navigation }: Props) => {
 
   return (
     <Carousel
-      data={remedies}
+      data={remedyList}
       renderItem={renderItem}
       sliderWidth={sizes.width}
       itemWidth={sizes.width * 0.75}

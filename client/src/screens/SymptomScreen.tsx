@@ -15,22 +15,19 @@ import { doc, updateDoc } from 'firebase/firestore'
 
 type Props = {
   navigation: any
+  route: any
 }
 
-const SymptomScreen = ({ navigation }: Props) => {
+const SymptomScreen = ({ navigation, route }: Props) => {
+  const { data } = route.params
   const auth = getAuth(app)
 
-  const [selectedAge, setSelectedAge] = useState('')
-  const [selectedGender, setSelectedGender] = useState('')
-  const [selectedSymptom, setSelectedSymptom] = useState('')
-  const [selectedFrequency, setSelectedFrequency] = useState('')
+  const [selectedAge, setSelectedAge] = useState(data.age)
+  const [selectedGender, setSelectedGender] = useState(data.gender)
+  const [selectedSymptom, setSelectedSymptom] = useState(data.symptom)
+  const [selectedFrequency, setSelectedFrequency] = useState(data.frequency)
 
   const handleNavigate = async () => {
-    if (selectedSymptom === 'headache') {
-      // navigation.navigate('Remedy')
-      // Add navigation for other symptoms as need ed
-    }
-
     // Update user health data
     if (auth.currentUser) {
       await updateDoc(doc(db, 'users', auth.currentUser.uid), {
@@ -39,7 +36,7 @@ const SymptomScreen = ({ navigation }: Props) => {
         symptom: selectedSymptom,
         frequency: selectedFrequency
       }).then(() => {
-        navigation.navigate('Home')
+        navigation.navigate('Suggestion', { symptom: selectedSymptom })
       })
     }
   }
@@ -54,8 +51,7 @@ const SymptomScreen = ({ navigation }: Props) => {
         valueField="value"
         value={selectedAge}
         onChange={(item) => {
-          const age: number = item.value
-          setSelectedAge(age.toString())
+          setSelectedAge(item.value)
         }}
       />
 

@@ -54,7 +54,10 @@ const Tabs = (props: Props) => {
           headerTitleStyle: { fontSize: 16, fontWeight: '200' },
           headerRight: () => (
             <TouchableOpacity onPress={() => alert('This is a button!')}>
-              <Image source={require('../assets/icons/bells.png')} style={{width: 20, height: 20, marginRight: 20}} />
+              <Image
+                source={require('../assets/icons/bells.png')}
+                style={{ width: 20, height: 20, marginRight: 20 }}
+              />
             </TouchableOpacity>
           )
         }}
@@ -65,6 +68,7 @@ const Tabs = (props: Props) => {
               key={name}
               name={name}
               component={screen}
+              initialParams={{ symptom: '' }}
               options={{
                 tabBarIcon: ({ focused }) => {
                   return (
