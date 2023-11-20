@@ -33,7 +33,12 @@ const SignupScreen = ({ navigation }: Props) => {
           name: name,
           phoneNumber: '',
           photoURL: imgUrl,
-          email: email
+          email: email,
+          age: '',
+          gender: '',
+          frequency: '',
+          symptom: '',
+          streak: []
         }
         //link uid to firestore
         await setDoc(doc(db, 'users', user.uid), userData)

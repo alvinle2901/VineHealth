@@ -16,7 +16,8 @@ export const getUserData = async (uid: string) => {
       age: data.age,
       gender: data.gender,
       frequency: data.frequency,
-      symptom: data.symptom
+      symptom: data.symptom,
+      streak: data.streak
     }
     return userData
   } else {

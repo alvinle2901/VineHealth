@@ -6,7 +6,7 @@ import { app } from '../../firebase.config'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 
 import { colors } from '../constants/colors'
-import { storeUser } from '../utils/storage'
+import { storeUser, storeUserId } from '../utils/storage'
 import { getUserData } from '../utils/get'
 import FormInput from '../components/FormInput'
 
@@ -24,6 +24,7 @@ const LoginScreen = ({ navigation }: Props) => {
       .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user
+        storeUserId(user.uid)
         const userData = await getUserData(user.uid)
 
         Toast.show('Sign in successfully!', {

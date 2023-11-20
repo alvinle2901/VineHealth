@@ -8,7 +8,6 @@ import {
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { db } from '../../firebase.config'
-import { getAuth } from 'firebase/auth'
 import { collection, query, onSnapshot, orderBy, doc } from 'firebase/firestore'
 
 import { colors } from '../constants/colors'
@@ -26,23 +25,30 @@ type Props = {
 }
 
 const HomeScreen = ({ navigation }: Props) => {
-  const auth = getAuth()
-  const user = auth.currentUser
-
   const [expanded, setExpanded] = useState(false)
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
   const [userData, setUserData] = useState<UserData>()
 
   // get user data
-  const getUserData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('my-key')
-      const value = jsonValue != null ? JSON.parse(jsonValue) : {}
-      const data: UserData = value
-      setUserData(data)
-    } catch (e) {
-      // error reading value
-    }
+  const fetchUserData = async () => {
+    const value = await AsyncStorage.getItem('userId')
+    const userId = value != null ? value : ''
+
+    const unsub = onSnapshot(doc(db, 'users', userId), (doc) => {
+      const data = doc.data()
+      const userData: UserData = {
+        name: data?.name,
+        phoneNumber: data?.phoneNumber,
+        photoURL: data?.photoURL,
+        email: data?.email,
+        age: data?.age,
+        gender: data?.gender,
+        frequency: data?.frequency,
+        symptom: data?.symptom,
+        streak: data?.streak
+      }
+      setUserData(userData)
+    })
   }
 
   // fetch feedbacks data from firebase
@@ -66,32 +72,8 @@ const HomeScreen = ({ navigation }: Props) => {
     })
   }
 
-  // Fetch user data
-  const fetchUserData = () => {
-    if (user) {
-      const unsub = onSnapshot(doc(db, 'users', user.uid), (doc) => {
-        const data = doc.data()
-        const userData: UserData = {
-          name: data?.name,
-          phoneNumber: data?.phoneNumber,
-          photoURL: data?.photoURL,
-          email: data?.email,
-          age: data?.age,
-          gender: data?.gender,
-          frequency: data?.frequency,
-          symptom: data?.symptom
-        }
-        setUserData(userData)
-      })
-    }
-  }
-
   useEffect(() => {
     fetchUserData()
-  }, [user])
-
-  useEffect(() => {
-    getUserData()
     fetchFeedbackData()
   }, [])
 
@@ -103,7 +85,9 @@ const HomeScreen = ({ navigation }: Props) => {
           <Text style={styles.heading}>Hello, {userData?.name}!</Text>
 
           {/* Edit Button */}
-          <TouchableOpacity onPress={() => navigation.navigate('Symptoms')}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Symptoms', { data: userData })}
+          >
             <Text style={[styles.editText, { marginTop: 40 }]}>Edit {'>'}</Text>
           </TouchableOpacity>
         </View>
@@ -121,6 +105,7 @@ const HomeScreen = ({ navigation }: Props) => {
                 img={img}
                 id={id}
                 navigation={navigation}
+                streak={userData?.streak}
               />
             )
           })}
