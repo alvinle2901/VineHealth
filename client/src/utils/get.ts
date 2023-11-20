@@ -12,7 +12,11 @@ export const getUserData = async (uid: string) => {
       name: data.name,
       photoURL: data.photoURL,
       phoneNumber: data.phoneNumber,
-      email: data.email
+      email: data.email,
+      age: data.age,
+      gender: data.gender,
+      frequency: data.frequency,
+      symptom: data.symptom
     }
     return userData
   } else {

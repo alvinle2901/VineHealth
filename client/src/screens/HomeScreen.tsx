@@ -6,13 +6,14 @@ import {
   StyleSheet
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { db } from '../../firebase.config'
 import { getAuth } from 'firebase/auth'
-import { collection, query, onSnapshot, orderBy } from 'firebase/firestore'
+import { collection, query, onSnapshot, orderBy, doc } from 'firebase/firestore'
 
-import { Feedback } from '../constants/modal'
 import { colors } from '../constants/colors'
 import { remedies } from '../constants/data'
+import { Feedback, UserData } from '../constants/modal'
 import { storeFeedback } from '../utils/storage'
 import { timestampMillis } from '../utils/convertTime'
 
@@ -30,6 +31,19 @@ const HomeScreen = ({ navigation }: Props) => {
 
   const [expanded, setExpanded] = useState(false)
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
+  const [userData, setUserData] = useState<UserData>()
+
+  // get user data
+  const getUserData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('my-key')
+      const value = jsonValue != null ? JSON.parse(jsonValue) : {}
+      const data: UserData = value
+      setUserData(data)
+    } catch (e) {
+      // error reading value
+    }
+  }
 
   // fetch feedbacks data from firebase
   const fetchFeedbackData = () => {
@@ -52,7 +66,32 @@ const HomeScreen = ({ navigation }: Props) => {
     })
   }
 
+  // Fetch user data
+  const fetchUserData = () => {
+    if (user) {
+      const unsub = onSnapshot(doc(db, 'users', user.uid), (doc) => {
+        const data = doc.data()
+        const userData: UserData = {
+          name: data?.name,
+          phoneNumber: data?.phoneNumber,
+          photoURL: data?.photoURL,
+          email: data?.email,
+          age: data?.age,
+          gender: data?.gender,
+          frequency: data?.frequency,
+          symptom: data?.symptom
+        }
+        setUserData(userData)
+      })
+    }
+  }
+
   useEffect(() => {
+    fetchUserData()
+  }, [user])
+
+  useEffect(() => {
+    getUserData()
     fetchFeedbackData()
   }, [])
 
@@ -61,7 +100,7 @@ const HomeScreen = ({ navigation }: Props) => {
       <View style={{ margin: 20, marginTop: -20 }}>
         <View style={styles.statusHeader}>
           {/* Header */}
-          <Text style={styles.heading}>Hello, {user?.displayName}!</Text>
+          <Text style={styles.heading}>Hello, {userData?.name}!</Text>
 
           {/* Edit Button */}
           <TouchableOpacity onPress={() => navigation.navigate('Symptoms')}>
@@ -69,7 +108,7 @@ const HomeScreen = ({ navigation }: Props) => {
           </TouchableOpacity>
         </View>
         {/* Current */}
-        <CurrentStatus />
+        <CurrentStatus user={userData} />
 
         {/* Practices */}
         <Text style={styles.header2}>Current Practices</Text>

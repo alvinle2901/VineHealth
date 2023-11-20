@@ -20,4 +20,8 @@ export type UserData = {
   phoneNumber: string
   photoURL: string
   email: string
+  age: string
+  gender: string
+  frequency: string
+  symptom: string
 }

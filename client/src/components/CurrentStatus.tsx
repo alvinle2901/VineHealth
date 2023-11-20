@@ -3,10 +3,19 @@ import React from 'react'
 import { colors } from '../constants/colors'
 
 import CalendarStreak from './CalendarStreak'
+import { UserData } from '../constants/modal'
 
-const CurrentStatus = () => {
-  const tags = [{ text: 'Sinusitis' }, { text: 'Women' }, { text: '38yr' }]
-  const feelings = ['Wheezy breathing'] // This can be dynamic based on the state
+type Props = {
+  user: UserData | undefined
+}
+
+const CurrentStatus = ({ user }: Props) => {
+  const tags = [
+    { text: user?.age },
+    { text: user?.gender },
+    { text: user?.frequency }
+  ]
+  const feelings = [user?.symptom]
   const userStreak = ['2023-11-12', '2023-11-13']
 
   return (
@@ -87,6 +96,6 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 16,
     textDecorationLine: 'underline',
-    marginRight: 10,
+    marginRight: 10
   }
 })

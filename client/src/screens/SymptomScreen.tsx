@@ -5,25 +5,42 @@ import { Dropdown } from 'react-native-element-dropdown'
 import { colors } from '../constants/colors'
 import {
   dataAge,
-  dataFrequency,
   dataGender,
-  dataSymptom
+  dataSymptom,
+  dataFrequency
 } from '../constants/data'
+import { getAuth } from 'firebase/auth'
+import { app, db } from '../../firebase.config'
+import { doc, updateDoc } from 'firebase/firestore'
 
 type Props = {
   navigation: any
 }
 
 const SymptomScreen = ({ navigation }: Props) => {
+  const auth = getAuth(app)
+
+  const [selectedAge, setSelectedAge] = useState('')
+  const [selectedGender, setSelectedGender] = useState('')
   const [selectedSymptom, setSelectedSymptom] = useState('')
   const [selectedFrequency, setSelectedFrequency] = useState('')
-  const [selectedGender, setSelectedGender] = useState('')
-  const [selectedAge, setSelectedAge] = useState('')
 
-  const handleNavigate = () => {
+  const handleNavigate = async () => {
     if (selectedSymptom === 'headache') {
-      navigation.navigate('Remedy')
+      // navigation.navigate('Remedy')
       // Add navigation for other symptoms as need ed
+    }
+
+    // Update user health data
+    if (auth.currentUser) {
+      await updateDoc(doc(db, 'users', auth.currentUser.uid), {
+        age: selectedAge,
+        gender: selectedGender,
+        symptom: selectedSymptom,
+        frequency: selectedFrequency
+      }).then(() => {
+        navigation.navigate('Home')
+      })
     }
   }
 
