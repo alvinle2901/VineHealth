@@ -14,6 +14,7 @@ import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 
 import { colors } from '../constants/colors'
 import { remedies } from '../constants/data'
+import { storeStreak } from '../utils/storage'
 
 import CloseButton from './CloseButton'
 import RadioSleepQuality from './RadioSleepQuality'
@@ -23,9 +24,10 @@ type Props = {
   title: string
   id: number
   navigation: any
+  streak: []
 }
 
-const PracticeCard = ({ title, img, id, navigation }: Props) => {
+const PracticeCard = ({ title, img, id, navigation, streak }: Props) => {
   const auth = getAuth()
   const user = auth.currentUser
 
@@ -79,6 +81,8 @@ const PracticeCard = ({ title, img, id, navigation }: Props) => {
                   onPress={() => {
                     setChecked('first')
                     setVisible(!visible)
+                    // update streaks
+                    storeStreak(streak, user?.uid)
                   }}
                 />
                 <Text>Yes</Text>

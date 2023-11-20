@@ -5,6 +5,7 @@ export type Remedy = {
   calendar: string
   info: string
   img: any
+  symptom: string
 }
 
 export type Feedback = {
@@ -24,4 +25,5 @@ export type UserData = {
   gender: string
   frequency: string
   symptom: string
+  streak: any
 }

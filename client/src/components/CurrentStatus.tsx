@@ -11,12 +11,12 @@ type Props = {
 
 const CurrentStatus = ({ user }: Props) => {
   const tags = [
-    { text: user?.age },
+    { text: `${user?.age} y/o` },
     { text: user?.gender },
     { text: user?.frequency }
   ]
   const feelings = [user?.symptom]
-  const userStreak = ['2023-11-12', '2023-11-13']
+  const userStreak = user?.streak ?? []
 
   return (
     <View style={styles.card}>
