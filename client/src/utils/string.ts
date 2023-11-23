@@ -37,3 +37,7 @@ export const getRemedyList = (symptom: any) => {
     )
   } else return remedies
 }
+
+export const pushValue = (array: string[], value: string) => {
+  array.push(value)
+}

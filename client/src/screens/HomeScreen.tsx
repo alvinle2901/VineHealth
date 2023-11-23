@@ -10,14 +10,13 @@ import { db } from '../../firebase.config'
 import { collection, query, onSnapshot, orderBy } from 'firebase/firestore'
 
 import { colors } from '../constants/colors'
-import { remedies } from '../constants/data'
 import { Feedback } from '../constants/modal'
 import { storeFeedback } from '../utils/storage'
 import { timestampMillis } from '../utils/convertTime'
 
 import FeedbackCard from '../components/FeedbackCard'
-import CurrentStatus from '../components/CurrentStatus'
 import PracticeCard from '../components/PracticeCard'
+import CurrentStatus from '../components/CurrentStatus'
 
 type Props = {
   navigation: any
@@ -26,7 +25,6 @@ type Props = {
 
 const HomeScreen = ({ navigation, route }: Props) => {
   const { userData } = route.params
-  console.log(userData)
   const [expanded, setExpanded] = useState(false)
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
 
@@ -75,15 +73,14 @@ const HomeScreen = ({ navigation, route }: Props) => {
         {/* Practices */}
         <Text style={styles.header2}>Current Practices</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {remedies.map(({ title, img, id }, index) => {
+          {userData.remedies.map((id: number, index: React.Key | null | undefined) => {
             return (
               <PracticeCard
                 key={index}
-                title={title}
-                img={img}
                 id={id}
                 navigation={navigation}
                 streak={userData?.streak}
+                userRemedy={userData?.remedies}
               />
             )
           })}

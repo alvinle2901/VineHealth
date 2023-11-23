@@ -20,14 +20,13 @@ import CloseButton from './CloseButton'
 import RadioSleepQuality from './RadioSleepQuality'
 
 type Props = {
-  img: any
-  title: string
   id: number
   navigation: any
   streak: []
+  userRemedy: []
 }
 
-const PracticeCard = ({ title, img, id, navigation, streak }: Props) => {
+const PracticeCard = ({ id, navigation, streak, userRemedy }: Props) => {
   const auth = getAuth()
   const user = auth.currentUser
 
@@ -40,7 +39,7 @@ const PracticeCard = ({ title, img, id, navigation, streak }: Props) => {
   const uploadData = async () => {
     const docRef = await addDoc(collection(db, 'Feedback'), {
       comment: feeling,
-      title: title,
+      title: remedies[id].title,
       symptom: 'headache',
       timeCreated: serverTimestamp(),
       userId: user?.uid
@@ -60,13 +59,19 @@ const PracticeCard = ({ title, img, id, navigation, streak }: Props) => {
             style={styles.container}
             onPress={() => {
               // To Detail Screen
-              navigation.navigate('Detail', { item: remedies[id] })
+              navigation.navigate('Detail', {
+                item: remedies[id],
+                userRemedy: userRemedy
+              })
             }}
           >
             {/* Image */}
-            <Image source={img} style={{ width: 300, height: 130 }} />
+            <Image
+              source={remedies[id].img}
+              style={{ width: 300, height: 130 }}
+            />
 
-            <Text style={styles.cardTitle}>{title}</Text>
+            <Text style={styles.cardTitle}>{remedies[id].title}</Text>
             <View style={styles.line}></View>
             <Text style={styles.cardSubTitle}>
               Did you do this practice today?

@@ -66,7 +66,8 @@ const Tabs = (props: Props) => {
           gender: data?.gender,
           frequency: data?.frequency,
           symptom: data?.symptom,
-          streak: data?.streak
+          streak: data?.streak,
+          remedies: data?.remedies
         }
         setUserData(userData)
         setLoading(false)

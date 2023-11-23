@@ -26,4 +26,5 @@ export type UserData = {
   frequency: string
   symptom: string
   streak: any
+  remedies: any
 }

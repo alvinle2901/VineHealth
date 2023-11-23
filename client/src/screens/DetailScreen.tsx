@@ -8,17 +8,22 @@ import {
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { auth, db } from '../../firebase.config'
+import { doc, updateDoc } from 'firebase/firestore'
 
 import { colors } from '../constants/colors'
 import { Feedback } from '../constants/modal'
+import { pushValue } from '../utils/string'
+
 import FeedbackCard from '../components/FeedbackCard'
 
 type Props = {
   route: any
+  navigation: any
 }
 
-const DetailScreen = ({ route }: Props) => {
-  const { item } = route.params
+const DetailScreen = ({ route, navigation }: Props) => {
+  const { item, userRemedy } = route.params
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
   const [expanded, setExpanded] = useState(false)
 
@@ -37,6 +42,20 @@ const DetailScreen = ({ route }: Props) => {
       return
     } catch (e) {
       // error reading value
+    }
+  }
+
+  // update user remedies
+  const submitHandler = async () => {
+    const newRemedies = userRemedy
+    pushValue(newRemedies, item.id)
+
+    if (auth.currentUser) {
+      await updateDoc(doc(db, 'users', auth.currentUser.uid), {
+        remedies: newRemedies
+      }).then(() => {
+        navigation.navigate('Home')
+      })
     }
   }
 
@@ -134,7 +153,7 @@ const DetailScreen = ({ route }: Props) => {
         <TouchableOpacity
           style={styles.actionButton}
           onPress={() => {
-            //
+            submitHandler()
           }}
         >
           <Text style={styles.actionButtonText}>I'll do it</Text>

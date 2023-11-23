@@ -19,7 +19,7 @@ type Props = {
 
 const RemedyScreen = ({ navigation, route }: Props) => {
   // filter the list of remedies based on symptom
-  const { symptom } = route.params
+  const { symptom, userData } = route.params
   const remedyList: Remedy[] = getRemedyList(symptom)
   const [selectedRemedies, setSelectedRemedies] = useState<boolean[]>([])
 
@@ -94,7 +94,8 @@ const RemedyScreen = ({ navigation, route }: Props) => {
                 onPress={() => {
                   // To Detail Screen
                   navigation.navigate('Detail', {
-                    item: item
+                    item: item,
+                    userRemedy: userData.remedies
                   })
                 }}
               >
