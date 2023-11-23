@@ -1,14 +1,19 @@
-import React from 'react'
 import { Animated, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { onSnapshot, doc } from 'firebase/firestore'
+import { db } from '../firebase.config'
 
 import { colors } from '../src/constants/colors'
 import { sizes } from '../src/constants/theme'
+import { UserData } from '../src/constants/modal'
 
 import HomeScreen from '../src/screens/HomeScreen'
 import DiaryScreen from '../src/screens/DiaryScreen'
 import RemedyScreen from '../src/screens/RemedyScreen'
 import ProfileScreen from '../src/screens/ProfileScreen'
+import LoadingIndicator from '../src/screens/LoadingIndicator'
 
 type Props = {}
 
@@ -38,14 +43,53 @@ const tabs = [
 const Tab = createBottomTabNavigator()
 
 const Tabs = (props: Props) => {
+  // Bottom nav bar navigation
   const offsetAnimation = React.useRef(new Animated.Value(0)).current
+
+  const [userData, setUserData] = useState<UserData>()
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      // get userId
+      const value = await AsyncStorage.getItem('userId')
+      const userId = value != null ? value : ''
+
+      const unsub = onSnapshot(doc(db, 'users', userId), (doc) => {
+        const data = doc.data()
+        const userData: UserData = {
+          name: data?.name,
+          phoneNumber: data?.phoneNumber,
+          photoURL: data?.photoURL,
+          email: data?.email,
+          age: data?.age,
+          gender: data?.gender,
+          frequency: data?.frequency,
+          symptom: data?.symptom,
+          streak: data?.streak
+        }
+        setUserData(userData)
+        setLoading(false)
+        console.log('Tab', userData)
+
+        // tabs.forEach(({ name }) => {
+        //   navigation.setParams(name, { userData });
+        // });
+      })
+    }
+    fetchUserData()
+  }, [])
+
+  if (loading) {
+    // Render a loading indicator or component while data is being fetched
+    return <LoadingIndicator />
+  }
 
   return (
     <>
       <Tab.Navigator
         initialRouteName="Home"
         screenOptions={{
-          // headerShown: false,
           tabBarShowLabel: false,
           tabBarHideOnKeyboard: true,
           tabBarActiveTintColor: '#8E97FD',
@@ -68,7 +112,7 @@ const Tabs = (props: Props) => {
               key={name}
               name={name}
               component={screen}
-              initialParams={{ symptom: '' }}
+              initialParams={{ symptom: '', userData: userData }}
               options={{
                 tabBarIcon: ({ focused }) => {
                   return (

@@ -15,16 +15,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { colors } from '../constants/colors'
 import { SECTIONS } from '../constants/data'
-import { UserData } from '../constants/modal'
 
 type Props = {
   navigation: any
+  route: any
 }
 
-const ProfileScreen = ({ navigation }: Props) => {
-  const auth = getAuth(app)
-  const [data, setData] = useState<UserData>()
+const ProfileScreen = ({ navigation, route }: Props) => {
+  const { userData } = route.params
 
+  const auth = getAuth(app)
   const [form, setForm] = useState({
     language: 'English',
     darkMode: true
@@ -33,28 +33,12 @@ const ProfileScreen = ({ navigation }: Props) => {
   const handleLogout = async () => {
     await signOut(auth)
       .then(async () => {
-        await AsyncStorage.removeItem('my-key')
+        await AsyncStorage.removeItem('userId')
       })
       .catch((error) => {
         console.log(error)
       })
   }
-
-  const getUserData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('my-key')
-      const value = jsonValue != null ? JSON.parse(jsonValue) : {}
-      const userData: UserData = value
-      setData(userData)
-      return
-    } catch (e) {
-      // error reading value
-    }
-  }
-
-  useEffect(() => {
-    getUserData()
-  }, [])
 
   return (
     <SafeAreaView style={{ backgroundColor: '#f6f6f6' }}>
@@ -62,16 +46,16 @@ const ProfileScreen = ({ navigation }: Props) => {
         <View style={styles.profile}>
           <Image
             source={{
-              uri: data?.photoURL
+              uri: userData.photoURL
             }}
             style={styles.profileAvatar}
           />
-          <Text style={styles.profileName}>{data?.name}</Text>
-          <Text style={styles.profileEmail}>{data?.email}</Text>
+          <Text style={styles.profileName}>{userData.name}</Text>
+          <Text style={styles.profileEmail}>{userData.email}</Text>
           {/* Edit */}
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Edit Profile', { user: data })
+              navigation.navigate('Edit Profile', { user: userData })
             }}
           >
             <View style={styles.profileAction}>

@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
+import Toast from 'react-native-root-toast'
 
 import { getAuth } from 'firebase/auth'
 import { doc, updateDoc } from 'firebase/firestore'
@@ -16,7 +17,6 @@ import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
 
 import { colors } from '../constants/colors'
 import FormInput from '../components/FormInput'
-import Toast from 'react-native-root-toast'
 
 type Props = {
   route: any
@@ -30,7 +30,7 @@ const EditProfileScreen = ({ route, navigation }: Props) => {
   const [name, setName] = useState(user.name)
   const [email, setEmail] = useState(user.email)
   const [image, setImage] = useState(user.photoURL)
-  const [phoneNum, setPhoneNum] = useState('')
+  const [phoneNum, setPhoneNum] = useState(user.phoneNumber)
 
   //upload image to storage
   const uploadImage = async (uri: RequestInfo) => {
@@ -82,7 +82,7 @@ const EditProfileScreen = ({ route, navigation }: Props) => {
       }).then(() => {
         navigation.navigate('Profile')
 
-        Toast.show('Update successfully!', {
+        Toast.show('Update profile successfully!', {
           duration: Toast.durations.SHORT,
           backgroundColor: 'white',
           textColor: 'black'

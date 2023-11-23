@@ -6,13 +6,12 @@ import {
   StyleSheet
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { db } from '../../firebase.config'
-import { collection, query, onSnapshot, orderBy, doc } from 'firebase/firestore'
+import { collection, query, onSnapshot, orderBy } from 'firebase/firestore'
 
 import { colors } from '../constants/colors'
 import { remedies } from '../constants/data'
-import { Feedback, UserData } from '../constants/modal'
+import { Feedback } from '../constants/modal'
 import { storeFeedback } from '../utils/storage'
 import { timestampMillis } from '../utils/convertTime'
 
@@ -22,34 +21,14 @@ import PracticeCard from '../components/PracticeCard'
 
 type Props = {
   navigation: any
+  route: any
 }
 
-const HomeScreen = ({ navigation }: Props) => {
+const HomeScreen = ({ navigation, route }: Props) => {
+  const { userData } = route.params
+  console.log(userData)
   const [expanded, setExpanded] = useState(false)
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
-  const [userData, setUserData] = useState<UserData>()
-
-  // get user data
-  const fetchUserData = async () => {
-    const value = await AsyncStorage.getItem('userId')
-    const userId = value != null ? value : ''
-
-    const unsub = onSnapshot(doc(db, 'users', userId), (doc) => {
-      const data = doc.data()
-      const userData: UserData = {
-        name: data?.name,
-        phoneNumber: data?.phoneNumber,
-        photoURL: data?.photoURL,
-        email: data?.email,
-        age: data?.age,
-        gender: data?.gender,
-        frequency: data?.frequency,
-        symptom: data?.symptom,
-        streak: data?.streak
-      }
-      setUserData(userData)
-    })
-  }
 
   // fetch feedbacks data from firebase
   const fetchFeedbackData = () => {
@@ -73,7 +52,6 @@ const HomeScreen = ({ navigation }: Props) => {
   }
 
   useEffect(() => {
-    fetchUserData()
     fetchFeedbackData()
   }, [])
 

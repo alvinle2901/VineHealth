@@ -23,11 +23,8 @@ function App() {
   // get user data
   const getUserData = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('my-key')
-      if (jsonValue) {
-        setIsLogin(true)
-      }
-      return jsonValue != null ? JSON.parse(jsonValue) : null
+      const id = await AsyncStorage.getItem('userId')
+      if (id) setIsLogin(true)
     } catch (e) {
       // error reading value
     }

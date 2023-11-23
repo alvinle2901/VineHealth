@@ -9,7 +9,6 @@ import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 
 import { colors } from '../constants/colors'
 import { UserData } from '../constants/modal'
-import { storeUser } from '../utils/storage'
 
 import FormInput from '../components/FormInput'
 import ImageUpload from '../components/ImageUpload'
@@ -47,7 +46,6 @@ const SignupScreen = ({ navigation }: Props) => {
           backgroundColor: 'white',
           textColor: 'black'
         })
-        storeUser(userData)
       })
       .catch((error) => {
         const errorCode = error.code
