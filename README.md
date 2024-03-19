@@ -10,7 +10,7 @@ VineHealth is a sustainable chronic pain management app that offers personalized
 
 The application will provide you suitable practices based on your current condition (which you have to input) and users can choose the practices to work on. Users can share their experiences on each practice so that other users can learn from. Implemented on React Native, Expo & TypeScript.
 
-Features:
+Additional features:
 
 - [Firebase](https://firebase.google.com/) to store users data and practices using Cloud Firestore and Storage
 - [Firebase Authentication](https://firebase.google.com/docs/auth) for authentication
@@ -19,29 +19,14 @@ Features:
 
 ## Screenshots
 
-<div style="display: flex; flex-direction: row;">
-  <div style="padding-right: 10px;">
-    <img src="./client/assets/screenshots/1.jpg" width="30%">
-  </div>
-  <div style="padding-right: 10px;">
-    <img src="./client/assets/screenshots/2.jpg" width="30%">
-  </div>
-  <div style="padding-right: 10px;">
-    <img src="./client/assets/screenshots/3.jpg" width="30%">
-  </div>
-</div>
-<br/>
-<div style="display: flex; flex-direction: row;">
-  <div style="padding-right: 10px;">
-    <img src="./client/assets/screenshots/4.jpg" width="30%">
-  </div>
-  <div style="padding-right: 10px;">
-    <img src="./client/assets/screenshots/5.jpg" width="30%">
-  </div>
-  <div style="padding-right: 10px;">
-    <img src="./client/assets/screenshots/6.jpg" width="30%">
-  </div>
-</div>
+![1](./client/assets/screenshots/1.jpg){: width="30%" style="padding-right: 10px;"}
+![2](./client/assets/screenshots/2.jpg){: width="30%" style="padding-right: 10px;"}
+![3](./client/assets/screenshots/3.jpg){: width="30%" style="padding-right: 10px;"}
+
+![4](./client/assets/screenshots/4.jpg){: width="30%" style="padding-right: 10px;"}
+![5](./client/assets/screenshots/5.jpg){: width="30%" style="padding-right: 10px;"}
+![6](./client/assets/screenshots/6.jpg){: width="30%"}
+
 <br/>
 
 ## Demo
