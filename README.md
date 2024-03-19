@@ -2,7 +2,7 @@
 
 ## Description
 
-This is our product to the Hackathon Junction 2023 - topic from Tietoevry.
+This is our product for the Hackathon Junction 2023 - topic from Tietoevry.
 
 <img src="https://i.ibb.co/CmjLg19/image-19.png">
 
@@ -19,13 +19,19 @@ Additional features:
 
 ## Screenshots
 
-![1](./client/assets/screenshots/1.jpg){: width="30%" style="padding-right: 10px;"}
-![2](./client/assets/screenshots/2.jpg){: width="30%" style="padding-right: 10px;"}
-![3](./client/assets/screenshots/3.jpg){: width="30%" style="padding-right: 10px;"}
+<div style="display: flex; flex-direction: 'row';">
+<img src="./client/assets/screenshots/1.jpg" style="padding-right:10px;" width=30%>
+<img src="./client/assets/screenshots/2.jpg" style="padding-right:10px;" width=30%>
+<img src="./client/assets/screenshots/3.jpg" style="padding-right:10px;" width=30%>
+</div>
+<br/>
+<br/>
 
-![4](./client/assets/screenshots/4.jpg){: width="30%" style="padding-right: 10px;"}
-![5](./client/assets/screenshots/5.jpg){: width="30%" style="padding-right: 10px;"}
-![6](./client/assets/screenshots/6.jpg){: width="30%"}
+<div style="display: flex; flex-direction: 'row';">
+<img src="./client/assets/screenshots/4.jpg" style="padding-right:10px;" width=30%>
+<img src="./client/assets/screenshots/5.jpg" style="padding-right:10px;" width=30%>
+<img src="./client/assets/screenshots/6.jpg" style="padding-right:10px;" width=30%>
+</div>
 
 <br/>
 
